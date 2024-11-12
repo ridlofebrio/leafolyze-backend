@@ -5,16 +5,9 @@ namespace App\Http\Requests\Api;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ObatUpdateRequest extends FormRequest
+class TokoStoreRequest extends FormRequest
 {
     use ImageTrait;
-    private $id;protected function passedValidation()
-
-{
-    $this->id = $this->route('id');
-    $this->handleUpload($this->id);
-}
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -40,21 +33,24 @@ class ObatUpdateRequest extends FormRequest
                 'required',
                 'exists:users,id',
             ],
+            'nama_toko' => 'string',
+            'alamat' => 'string',
+            'jam_operasional' => 'string',
             'deskripsi' => 'string',
-            'namaObat' => 'string',
-            'hargaObat' => 'string',
-            'jenis' => 'string',
         ];
+    }
+    protected function passedValidation(){
+        $this->handleUpload();
     }
     public function getFile()
     {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
             'user_id' => $this->input('user_id'),
+            'nama_toko' => $this->input('nama_toko'),
+            'alamat' => $this->input('alamat'),
+            'jam_operasional' => $this->input('jam_operasional'),
             'deskripsi' => $this->input('deskripsi'),
-            'namaObat' => $this->input('namaObat'),
-            'hargaObat' => $this->input('hargaObat'),
-            'jenis' => $this->input('jenis'),
         ];
     }
 }
