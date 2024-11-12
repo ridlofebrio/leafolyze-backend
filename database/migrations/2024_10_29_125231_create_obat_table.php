@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('obats', function (Blueprint $table) {
             $table->id();
-            $table->string('gambarUrlObat');
+            $table->string('gambarUrl');
             $table->string('namaObat');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->text('deskripsi');

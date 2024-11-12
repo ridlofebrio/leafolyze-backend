@@ -2,18 +2,15 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Providers\Services\Interface\Services\CloudinaryStorage;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
-class MachineLearningStoreRequest extends FormRequest
+class ObatStoreRequest extends FormRequest
 {
-    use ImageTrait;
-
     /**
      * Determine if the user is authorized to make this request.
      */
+    use ImageTrait;
     public function authorize(): bool
     {
         return true;
@@ -27,22 +24,34 @@ class MachineLearningStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'gambarUrl' => 'required|image|mimes:jpeg,png,jpg',
-            'user_id' => 'required|unique:gambar,user_id',
-            'deskripsi' => 'string'
+            'gambarUrl' => [
+                'required',
+                'image',
+                'mimes:jpeg,png,jpg',
+            ],
+            'user_id' => [
+                'required',
+                'exists:users,id',
+            ],
+            'deskripsi' => 'string',
+            'namaObat' => 'string',
+            'harga' => 'string',
+            'jenis' => 'string',
         ];
     }
-
-
     protected function passedValidation(){
-       $this->handleUpload();
+        $this->handleUpload();
     }
 
-    public function getFile(){
+    public function getFile()
+    {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
-            'user_id'   => $this->input('user_id'),
+            'user_id' => $this->input('user_id'),
             'deskripsi' => $this->input('deskripsi'),
+            'namaObat' => $this->input('namaObat'),
+            'harga' => $this->input('harga'),
+            'jenis' => $this->input('jenis'),
         ];
     }
 }

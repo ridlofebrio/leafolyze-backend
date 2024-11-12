@@ -28,7 +28,7 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('kelamin');
             $table->string('alamat');
-            $table->string('gambar');
+            $table->string('gambarUrl');
             $table->timestamps();
         });
 

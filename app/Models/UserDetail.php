@@ -15,11 +15,10 @@ class UserDetail extends Model
     protected $fillable = [
         'user_id',
         'nama',
-        'Tanggal Lahir',
-        'Kelamin',
-        'Alamat',
-        'updated_at',
-        'created_at',
+        'tanggal_lahir',
+        'kelamin',
+        'alamat',
+        'gambarUrl',
     ];
 
     /**

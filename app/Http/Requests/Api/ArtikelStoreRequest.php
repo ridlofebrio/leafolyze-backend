@@ -2,15 +2,12 @@
 
 namespace App\Http\Requests\Api;
 
-use App\Providers\Services\Interface\Services\CloudinaryStorage;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
-class MachineLearningStoreRequest extends FormRequest
+class ArtikelStoreRequest extends FormRequest
 {
     use ImageTrait;
-
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -27,22 +24,26 @@ class MachineLearningStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'judul' => 'required|string',
+            'konten' => 'required|string',
+            'durasi_baca' => 'required',
             'gambarUrl' => 'required|image|mimes:jpeg,png,jpg',
-            'user_id' => 'required|unique:gambar,user_id',
-            'deskripsi' => 'string'
+            'user_id' => 'required|exists:users,id',
         ];
     }
 
-
     protected function passedValidation(){
-       $this->handleUpload();
+        $this->handleUpload();
     }
 
-    public function getFile(){
+    public function getFile()
+    {
         return [
+            'judul' => $this->input('judul'),
+            'konten' => $this->input('konten'),
+            'durasi_baca' => $this->input('durasi_baca'),
             'gambarUrl' => $this->input('gambarUrl'),
-            'user_id'   => $this->input('user_id'),
-            'deskripsi' => $this->input('deskripsi'),
+            'user_id' => $this->input('user_id'),
         ];
     }
 }

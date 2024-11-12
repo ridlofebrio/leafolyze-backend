@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\Api\ArtikelStoreRequest;
+use App\Http\Requests\Api\ArtikelUpdateRequest;
 use App\Http\Resources\GambarResource;
 use App\Http\Controllers\Controller;
 use App\Models\Artikel;
@@ -50,7 +52,7 @@ class ArtikelController extends Controller
             ], 500);
         }
     }
-    public function store(Request $request)
+    public function store(ArtikelStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -59,7 +61,7 @@ class ArtikelController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(Request $request, $id)
+    public function update(ArtikelUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 

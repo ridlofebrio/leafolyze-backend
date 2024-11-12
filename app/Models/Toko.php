@@ -19,7 +19,7 @@ class Toko extends Model
         'alamat',
         'deskripsi',
         'jam_operasional',
-        'gambar',
+        'gambarUrl',
     ];
 
     /**
@@ -28,11 +28,5 @@ class Toko extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    protected function gambarUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => url('/storage/gambar/' . $value),
-        );
     }
 }

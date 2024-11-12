@@ -14,7 +14,7 @@ class Obat extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'gambarUrlObat',
+        'gambarUrl',
         'namaObat',
         'user_id',
         'deskripsi',
@@ -28,12 +28,5 @@ class Obat extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    protected function gambarUrl(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => url('/storage/gambar/' . $value),
-        );
     }
 }
