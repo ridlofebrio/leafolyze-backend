@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\PostStoreRequest;
-use App\Http\Requests\Api\PostUpdateRequest;
+use App\Http\Requests\Api\MachineLearningStoreRequest;
+use App\Http\Requests\Api\MachineLearningUpdateRequest;
 use App\Http\Resources\GambarResource;
 use App\Models\Gambar;
 use App\Providers\Services\GambarService;
@@ -52,7 +52,7 @@ class GambarMachineLearningController extends Controller
         }
     }
 
-    public function store(PostStoreRequest $request): GambarResource
+    public function store(MachineLearningStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -61,7 +61,7 @@ class GambarMachineLearningController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(PostUpdateRequest $request, $id): GambarResource
+    public function update(MachineLearningUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 

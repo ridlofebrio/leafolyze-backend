@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('alamat');
             $table->string('deskripsi');
             $table->string('jam_operasional');
-            $table->string('gambar');
+            $table->string('gambarUrl');
             $table->timestamps();
         });
     }

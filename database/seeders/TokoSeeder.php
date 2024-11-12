@@ -18,7 +18,7 @@ class TokoSeeder extends Seeder
             'alamat' => 'Jl. Sehat No. 10, Jakarta',
             'deskripsi' => 'Toko yang menyediakan berbagai jenis tanaman sehat dan berkualitas.',
             'jam_operasional' => '09:00 - 18:00',
-            'gambar' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
+            'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
 
         Toko::create([
@@ -27,7 +27,7 @@ class TokoSeeder extends Seeder
             'alamat' => 'Jl. Organik No. 5, Bandung',
             'deskripsi' => 'Menjual produk-produk organik, termasuk sayuran dan buah-buahan segar.',
             'jam_operasional' => '08:00 - 17:00',
-            'gambar' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
+            'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
 
         Toko::create([
@@ -36,7 +36,7 @@ class TokoSeeder extends Seeder
             'alamat' => 'Jl. Pertanian No. 15, Yogyakarta',
             'deskripsi' => 'Toko alat pertanian dan perlengkapan berkebun.',
             'jam_operasional' => '07:00 - 16:00',
-            'gambar' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
+            'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
     }
 }

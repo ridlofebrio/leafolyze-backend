@@ -6,7 +6,7 @@ use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
 
-class PostUpdateRequest extends FormRequest
+class MachineLearningUpdateRequest extends FormRequest
 {
     use ImageTrait;
 private $id;protected function passedValidation()

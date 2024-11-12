@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Models\Obat;
 use App\Http\Controllers\Controller;
 use App\Providers\Services\ObatService;
+use App\Http\Requests\Api\ObatStoreRequest;
+use App\Http\Requests\Api\ObatUpdateRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\GambarResource;
-use Illuminate\Http\Request;
+
 
 class ObatController extends Controller
 {
@@ -54,7 +56,7 @@ class ObatController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(ObatStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -63,7 +65,7 @@ class ObatController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(Request $request, $id)
+    public function update(ObatUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 
@@ -72,7 +74,7 @@ class ObatController extends Controller
             new GambarResource(false, 'Gagal mengupdate gambar', '');
     }
 
-    public function destroy($id)
+    public function destroy($id): GambarResource
     {
         $success = $this->service->delete($id);
 

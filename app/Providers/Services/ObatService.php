@@ -14,6 +14,7 @@ class ObatService implements CRUDInterface
     {
         try {
             Log::info('Uploading image to Cloudinary');
+            Log::info($data);
             $gambar = Obat::create($data);
             Log::info('Post created successfully', ['post_id' => $gambar->id]);
 

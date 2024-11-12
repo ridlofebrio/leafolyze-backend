@@ -7,7 +7,7 @@ use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
 
-class PostStoreRequest extends FormRequest
+class MachineLearningStoreRequest extends FormRequest
 {
     use ImageTrait;
 
