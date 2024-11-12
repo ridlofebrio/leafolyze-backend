@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, Notifiable, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'email',
         'password',
-        'Acces',
+        'access',
     ];
 
     /**
@@ -34,5 +36,21 @@ class User extends Authenticatable
     public function userDetail()
     {
         return $this->hasOne(UserDetail::class, 'user_id');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [
+            'iss' => config('app.url'),
+            'iat' => time(),
+            'nbf' => time(),
+            'sub' => $this->id,
+            'role' => $this->role
+        ];
     }
 }
