@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('gambarUrlObat');
             $table->string('namaObat');
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->text('deskripsi');
             $table->string('harga');
             $table->enum('jenis' , ['Bacterial Spot', 'Early Blight','Healthy','Late Blight','Leaf Mold','Target Spot','Black Spot']);

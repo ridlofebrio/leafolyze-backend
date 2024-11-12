@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tokos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('nama_toko');
             $table->string('alamat');
             $table->string('deskripsi');

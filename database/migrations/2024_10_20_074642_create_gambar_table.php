@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('gambar', function (Blueprint $table) {
             $table->id();
             $table->string('gambarUrl');
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->text('deskripsi');
             $table->timestamps();
         });

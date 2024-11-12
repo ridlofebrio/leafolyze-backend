@@ -20,9 +20,10 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); // Menggunakan foreignId
             $table->string('nama');
             $table->date('tanggal_lahir');
             $table->string('kelamin');
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('gambar');
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
