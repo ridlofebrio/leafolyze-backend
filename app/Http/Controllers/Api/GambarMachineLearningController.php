@@ -28,7 +28,7 @@ class GambarMachineLearningController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Gambar::latest()->paginate(5);
+            $posts = Gambar::all();
             Log::info('Posts retrieved successfully');
 
             return new GambarResource(true, 'List Data Posts', $posts);

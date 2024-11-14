@@ -29,7 +29,7 @@ class TokoController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Toko::latest()->paginate(5);
+            $posts = Toko::all();
             Log::info('Posts retrieved successfully');
             return new GambarResource(true, 'List Data Posts', $posts);
         } catch (\Exception $e) {

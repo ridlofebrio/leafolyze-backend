@@ -25,17 +25,18 @@ class ArtikelController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Artikel::latest()->paginate(5);
-            Log::info('Posts retrieved successfully');
-            return new GambarResource(true, 'List Data Posts', $posts);
+            $latestPost = Artikel::all();
+            Log::info('Post retrieved successfully');
+            return new GambarResource(true, 'Detail Data Post', $latestPost);
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
+            Log::error('Failed to retrieve post', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengambil data post',
             ], 500);
         }
     }
+
 
     public function show($id)
     {
