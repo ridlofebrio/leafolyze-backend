@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Obat extends Model
+class Toko extends Model
 {
     use HasFactory;
 
@@ -14,12 +14,12 @@ class Obat extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'gambarUrl',
-        'namaObat',
         'user_id',
-        'deskripsi',
-        'harga',
-        'jenis',
+        'name',
+        'address',
+        'description',
+        'oprational',
+        'gambarUrl',
     ];
 
     /**

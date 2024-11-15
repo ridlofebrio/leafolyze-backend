@@ -14,29 +14,29 @@ class ObatSeeder extends Seeder
     {
         Obat::create([
             'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
-            'namaObat' => 'Obat Bacterial Spot',
+            'name' => 'Obat Bacterial Spot',
             'user_id' => 3,
-            'deskripsi' => 'Obat ini digunakan untuk mengobati penyakit Bacterial Spot pada tanaman.',
-            'harga' => '50000',
-            'jenis' => 'Bacterial Spot',
+            'description' => 'Obat ini digunakan untuk mengobati penyakit Bacterial Spot pada tanaman.',
+            'price' => '50000',
+            'type' => 'Bacterial Spot',
         ]);
 
         Obat::create([
             'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
-            'namaObat' => 'Obat Early Blight',
+            'name' => 'Obat Early Blight',
             'user_id' => 3,
-            'deskripsi' => 'Obat ini digunakan untuk mengobati penyakit Early Blight pada tanaman.',
-            'harga' => '45000',
-            'jenis' => 'Early Blight',
+            'description' => 'Obat ini digunakan untuk mengobati penyakit Early Blight pada tanaman.',
+            'price' => '45000',
+            'type' => 'Early Blight',
         ]);
 
         Obat::create([
             'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
-            'namaObat' => 'Obat Healthy',
+            'name' => 'Obat Healthy',
             'user_id' => 3,
-            'deskripsi' => 'Obat ini untuk menjaga kesehatan tanaman agar tetap sehat.',
-            'harga' => '55000',
-            'jenis' => 'Healthy',
+            'description' => 'Obat ini untuk menjaga kesehatan tanaman agar tetap sehat.',
+            'price' => '55000',
+            'type' => 'Healthy',
         ]);
     }
 }

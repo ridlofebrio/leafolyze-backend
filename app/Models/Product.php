@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Toko extends Model
+class Shop extends Model
 {
     use HasFactory;
 
@@ -14,19 +14,19 @@ class Toko extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'user_id',
-        'nama_toko',
-        'alamat',
-        'deskripsi',
-        'jam_operasional',
         'gambarUrl',
+        'name',
+        'toko_id',
+        'description',
+        'price',
+        'type',
     ];
 
     /**
      * Relation to User.
      */
-    public function user()
+    public function toko()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Toko::class);
     }
 }
