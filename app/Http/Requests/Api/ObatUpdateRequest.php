@@ -36,25 +36,25 @@ class ObatUpdateRequest extends FormRequest
                 'image',
                 'mimes:jpeg,png,jpg',
             ],
-            'user_id' => [
+            'shop_id' => [
                 'required',
                 'exists:users,id',
             ],
-            'deskripsi' => 'string',
-            'namaObat' => 'string',
-            'hargaObat' => 'string',
-            'jenis' => 'string',
+            'description' => 'string',
+            'name' => 'string',
+            'price' => 'string',
+            'type' => 'string',
         ];
     }
     public function getFile()
     {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
-            'user_id' => $this->input('user_id'),
-            'deskripsi' => $this->input('deskripsi'),
-            'namaObat' => $this->input('namaObat'),
-            'hargaObat' => $this->input('hargaObat'),
-            'jenis' => $this->input('jenis'),
+            'shop_id' => $this->input('shop_id'),
+            'description' => $this->input('description'),
+            'name' => $this->input('name'),
+            'price' => $this->input('price'),
+            'type' => $this->input('type'),
         ];
     }
 }

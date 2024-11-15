@@ -14,7 +14,7 @@ class Gambar extends Model
     protected $fillable = [
         'gambarUrl',
         'user_id',
-        'deskripsi',
+        'description',
     ];
 
     public function user()

@@ -23,11 +23,11 @@ return new class extends Migration
 
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); // Menggunakan foreignId
-            $table->string('nama');
-            $table->date('tanggal_lahir');
-            $table->string('kelamin');
-            $table->string('alamat');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
+            $table->string('name');
+            $table->date('birth');
+            $table->string('gender');
+            $table->string('address');
             $table->string('gambarUrl');
             $table->timestamps();
         });

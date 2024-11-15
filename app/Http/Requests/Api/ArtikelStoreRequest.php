@@ -24,9 +24,9 @@ class ArtikelStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'judul' => 'required|string',
-            'konten' => 'required|string',
-            'durasi_baca' => 'required',
+            'title' => 'required|string',
+            'content' => 'required|string',
+            'duration' => 'required',
             'gambarUrl' => 'required|image|mimes:jpeg,png,jpg',
             'user_id' => 'required|exists:users,id',
         ];
@@ -39,9 +39,9 @@ class ArtikelStoreRequest extends FormRequest
     public function getFile()
     {
         return [
-            'judul' => $this->input('judul'),
-            'konten' => $this->input('konten'),
-            'durasi_baca' => $this->input('durasi_baca'),
+            'title' => $this->input('title'),
+            'content' => $this->input('content'),
+            'duration' => $this->input('duration'),
             'gambarUrl' => $this->input('gambarUrl'),
             'user_id' => $this->input('user_id'),
         ];

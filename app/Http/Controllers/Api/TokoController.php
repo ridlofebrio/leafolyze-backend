@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\TokoStoreRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TokoUpdateRequest;
-use App\Models\Toko;
+use App\Models\Shop;
 use App\Providers\Services\TokoService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\GambarResource;
@@ -29,7 +29,7 @@ class TokoController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Toko::all();
+            $posts = Shop::all();
             Log::info('Posts retrieved successfully');
             return new GambarResource(true, 'List Data Posts', $posts);
         } catch (\Exception $e) {
@@ -44,7 +44,7 @@ class TokoController extends Controller
     {
         try {
             Log::info("Attempting to retrieve post with ID: $id");
-            $post = Toko::findOrFail($id);
+            $post = Shop::findOrFail($id);
             Log::info("Post with ID $id retrieved successfully");
             return new GambarResource(true, 'Detail Data Post', $post);
         } catch (\Exception $e) {

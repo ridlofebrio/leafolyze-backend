@@ -33,10 +33,10 @@ class TokoStoreRequest extends FormRequest
                 'required',
                 'exists:users,id',
             ],
-            'nama_toko' => 'string',
-            'alamat' => 'string',
-            'jam_operasional' => 'string',
-            'deskripsi' => 'string',
+            'name' => 'string',
+            'address' => 'string',
+            'operational' => 'string',
+            'description' => 'string',
         ];
     }
     protected function passedValidation(){
@@ -47,10 +47,10 @@ class TokoStoreRequest extends FormRequest
         return [
             'gambarUrl' => $this->input('gambarUrl'),
             'user_id' => $this->input('user_id'),
-            'nama_toko' => $this->input('nama_toko'),
-            'alamat' => $this->input('alamat'),
-            'jam_operasional' => $this->input('jam_operasional'),
-            'deskripsi' => $this->input('deskripsi'),
+            'name' => $this->input('name'),
+            'address' => $this->input('address'),
+            'operational' => $this->input('operational'),
+            'description' => $this->input('description'),
         ];
     }
 }

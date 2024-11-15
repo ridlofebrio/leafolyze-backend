@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('artikels', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->string('judul');
-            $table->text('konten');
+            $table->string('title');
+            $table->text('content');
             $table->string('gambarUrl');
-            $table->integer('durasi_baca');
+            $table->integer('duration');
             $table->timestamps();
         });
     }

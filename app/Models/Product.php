@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class Shop extends Model
+class Product extends Model
 {
     use HasFactory;
 
@@ -16,7 +16,7 @@ class Shop extends Model
     protected $fillable = [
         'gambarUrl',
         'name',
-        'toko_id',
+        'shop_id',
         'description',
         'price',
         'type',
@@ -27,6 +27,6 @@ class Shop extends Model
      */
     public function toko()
     {
-        return $this->belongsTo(Toko::class);
+        return $this->belongsTo(Shop::class);
     }
 }

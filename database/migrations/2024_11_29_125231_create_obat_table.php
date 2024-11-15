@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('gambarUrl');
             $table->string('name');
-            $table->foreignId('toko_id')->nullable()->constrained('shop')->onDelete('cascade');
+            $table->foreignId('shop_id')->nullable()->constrained('shops')->onDelete('cascade');
             $table->text('description');
             $table->string('price');
             $table->enum('type' , ['Bacterial Spot', 'Early Blight','Healthy','Late Blight','Leaf Mold','Target Spot','Black Spot']);

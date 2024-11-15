@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
             UserSeedeer::class,
             UserDetailSeeder::class,
             GambarSeedeer::class,
-            ObatSeeder::class,
             ArtikelSeeder::class,
             TokoSeeder::class,
+            ObatSeeder::class,
         ]);
     }
 }

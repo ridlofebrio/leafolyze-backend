@@ -29,14 +29,14 @@ class ObatStoreRequest extends FormRequest
                 'image',
                 'mimes:jpeg,png,jpg',
             ],
-            'user_id' => [
+            'shop_id' => [
                 'required',
                 'exists:users,id',
             ],
-            'deskripsi' => 'string',
-            'namaObat' => 'string',
-            'harga' => 'string',
-            'jenis' => 'string',
+            'description' => 'string',
+            'name' => 'string',
+            'price' => 'string',
+            'type' => 'string',
         ];
     }
     protected function passedValidation(){
@@ -47,11 +47,11 @@ class ObatStoreRequest extends FormRequest
     {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
-            'user_id' => $this->input('user_id'),
-            'deskripsi' => $this->input('deskripsi'),
-            'namaObat' => $this->input('namaObat'),
-            'harga' => $this->input('harga'),
-            'jenis' => $this->input('jenis'),
+            'shop_id' => $this->input('shop_id'),
+            'description' => $this->input('description'),
+            'name' => $this->input('name'),
+            'price' => $this->input('price'),
+            'type' => $this->input('type'),
         ];
     }
 }
