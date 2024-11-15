@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\GambarMachineLearningController;
+use App\Http\Controllers\Api\MachineLearningImageController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +14,8 @@ Route::get('me', [AuthController::class, 'me']);
 
 // protected
 Route::middleware('auth:api')->group(function () {
-    Route::apiResource('/machinelearning', GambarMachineLearningController::class)->except(['edit', 'create']);
-    Route::apiResource('/obat', \App\Http\Controllers\Api\ObatController::class)->except(['edit', 'create']);
-    Route::apiResource('/artikel', \App\Http\Controllers\Api\ArtikelController::class)->except(['edit', 'create']);
-    Route::apiResource('/toko', \App\Http\Controllers\Api\TokoController::class)->except(['edit', 'create']);
+    Route::apiResource('/product', \App\Http\Controllers\Api\ProductController::class)->except(['edit', 'create']);
+    Route::apiResource('/machinelearning', MachineLearningImageController::class)->except(['edit', 'create']);
+    Route::apiResource('/article', \App\Http\Controllers\Api\ArticleController::class)->except(['edit', 'create']);
+    Route::apiResource('/shop', \App\Http\Controllers\Api\ShopController::class)->except(['edit', 'create']);
 });
