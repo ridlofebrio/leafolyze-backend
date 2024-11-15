@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Artikel;
+use App\Models\Article;
 
 class ArtikelSeeder extends Seeder
 {
@@ -12,7 +12,7 @@ class ArtikelSeeder extends Seeder
      */
     public function run(): void
     {
-        Artikel::create([
+        Article::create([
             'user_id' => 1,
             'title' => 'Cara Merawat Tanaman',
             'content' => 'Panduan lengkap untuk merawat tanaman agar tetap sehat dan subur.',
@@ -20,7 +20,7 @@ class ArtikelSeeder extends Seeder
             'duration' => 5,
         ]);
 
-        Artikel::create([
+        Article::create([
             'user_id' => 1,
             'title' => 'Penyakit pada Tanaman dan Cara Mengatasinya',
             'content' => 'Penjelasan tentang berbagai penyakit tanaman dan langkah-langkah untuk mengatasi.',
@@ -28,7 +28,7 @@ class ArtikelSeeder extends Seeder
             'duration' => 8,
         ]);
 
-        Artikel::create([
+        Article::create([
             'user_id' => 1,
             'title' => 'Tips Bertanam di Musim Hujan',
             'content' => 'Tips dan trik agar tanaman tetap tumbuh subur di musim hujan.',

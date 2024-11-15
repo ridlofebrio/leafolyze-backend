@@ -6,7 +6,7 @@ use App\Http\Requests\Api\ArtikelStoreRequest;
 use App\Http\Requests\Api\ArtikelUpdateRequest;
 use App\Http\Resources\GambarResource;
 use App\Http\Controllers\Controller;
-use App\Models\Artikel;
+use App\Models\Article;
 use App\Providers\Services\ArtikelService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -25,7 +25,7 @@ class ArtikelController extends Controller
     {
         try {
             Log::info('Attempting to retrieve post');
-            $latestPost = Artikel::all();
+            $latestPost = Article::all();
             if ($latestPost) {
                 Log::info('Post retrieved successfully');
                 return response()->json(new GambarResource(true, 'Detail Data Post', $latestPost), 200);
@@ -44,7 +44,7 @@ class ArtikelController extends Controller
     {
         try {
             Log::info("Attempting to retrieve post with ID: $id");
-            $post = Artikel::findOrFail($id);
+            $post = Article::findOrFail($id);
             Log::info("Post with ID $id retrieved successfully");
             return new GambarResource(true, 'Detail Data Post', $post);
         } catch (\Exception $e) {

@@ -18,7 +18,7 @@ class Shop extends Model
         'name',
         'address',
         'description',
-        'oprational',
+        'operational',
         'gambarUrl',
     ];
 

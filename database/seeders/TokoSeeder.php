@@ -17,7 +17,7 @@ class TokoSeeder extends Seeder
             'name' => 'Shop Tanaman Sehat',
             'address' => 'Jl. Sehat No. 10, Jakarta',
             'description' => 'Shop yang menyediakan berbagai jenis tanaman sehat dan berkualitas.',
-            'oprational' => '09:00 - 18:00',
+            'operational' => '09:00 - 18:00',
             'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
 
@@ -26,7 +26,7 @@ class TokoSeeder extends Seeder
             'name' => 'Shop Organik Makmur',
             'address' => 'Jl. Organik No. 5, Bandung',
             'description' => 'Menjual produk-produk organik, termasuk sayuran dan buah-buahan segar.',
-            'oprational' => '08:00 - 17:00',
+            'operational' => '08:00 - 17:00',
             'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
 
@@ -35,7 +35,7 @@ class TokoSeeder extends Seeder
             'name' => 'Shop Pertanian Sejahtera',
             'address' => 'Jl. Pertanian No. 15, Yogyakarta',
             'description' => 'Shop alat pertanian dan perlengkapan berkebun.',
-            'oprational' => '07:00 - 16:00',
+            'operational' => '07:00 - 16:00',
             'gambarUrl' => 'https://warta.luwutimurkab.go.id/wp-content/uploads/2021/07/IMG-20210707-WA0034.jpg',
         ]);
     }

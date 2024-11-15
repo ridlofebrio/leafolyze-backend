@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('description');
-            $table->string('oprational');
+            $table->string('operational');
             $table->string('gambarUrl');
             $table->timestamps();
         });
