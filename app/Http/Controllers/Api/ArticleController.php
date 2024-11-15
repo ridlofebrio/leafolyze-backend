@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 
-class ArtikelController extends Controller
+class ArticleController extends Controller
 {
     private ArtikelService $service;
 

@@ -3,11 +3,11 @@
 namespace App\Providers\Services;
 
 
-use App\Models\Obat;
+use App\Models\Product;
 use App\Providers\Services\Interface\CRUDInterface;
 use Illuminate\Support\Facades\Log;
 
-class ObatService implements CRUDInterface
+class ProductService implements CRUDInterface
 {
     public function store($data): bool
 
@@ -15,7 +15,7 @@ class ObatService implements CRUDInterface
         try {
             Log::info('Uploading image to Cloudinary');
             Log::info($data);
-            $gambar = Obat::create($data);
+            $gambar = Product::create($data);
             Log::info('Post created successfully', ['post_id' => $gambar->id]);
 
             return true;
@@ -28,7 +28,7 @@ class ObatService implements CRUDInterface
     {
         try {
             Log::info("Attempting to update post with ID: $id");
-            $gambar = Obat::findOrFail($id)->update($data);
+            $gambar = Product::findOrFail($id)->update($data);
             Log::info("Post with ID: $id updated successfully");
 
             return true;
@@ -41,7 +41,7 @@ class ObatService implements CRUDInterface
     {
         try {
             Log::info("Attempting to delete post with ID: $id");
-            $gambar = Obat::findOrFail($id);
+            $gambar = Product::findOrFail($id);
             $gambar->delete();
             Log::info("Post with ID: $id deleted successfully");
 

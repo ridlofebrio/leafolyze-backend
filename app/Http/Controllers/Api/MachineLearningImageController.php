@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\TokoStoreRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\TokoUpdateRequest;
-use App\Models\Shop;
-use App\Providers\Services\TokoService;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\Api\MachineLearningStoreRequest;
+use App\Http\Requests\Api\MachineLearningUpdateRequest;
 use App\Http\Resources\GambarResource;
+use App\Models\Gambar;
+use App\Providers\Services\GambarService;
+use Illuminate\Support\Facades\Log;
 
-
-class TokoController extends Controller
+class MachineLearningImageController extends Controller
 {
-    private TokoService $service;
-    public function __construct(TokoService $service)
+    private GambarService $service;
+
+    public function __construct(GambarService $service)
     {
         $this->service = $service;
     }
@@ -24,39 +24,35 @@ class TokoController extends Controller
      *
      * @return GambarResource
      */
-
-    public function index()
+    public function index(): GambarResource
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Shop::all();
+            $posts = Gambar::all();
             Log::info('Posts retrieved successfully');
+
             return new GambarResource(true, 'List Data Posts', $posts);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data post',
-            ], 500);
-        }
-    }
-    public function show($id)
-    {
-        try {
-            Log::info("Attempting to retrieve post with ID: $id");
-            $post = Shop::findOrFail($id);
-            Log::info("Post with ID $id retrieved successfully");
-            return new GambarResource(true, 'Detail Data Post', $post);
-        } catch (\Exception $e) {
-            Log::error("Failed to retrieve post with ID: $id", ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Post dengan ID ' . $id . ' tidak ditemukan',
-            ], 500);
+            return new GambarResource(false, 'Gagal mengambil data post', '');
         }
     }
 
-    public function store(TokoStoreRequest $request): GambarResource
+    public function show($id): GambarResource
+    {
+        try {
+            Log::info("Attempting to retrieve post with ID: $id");
+            $post = Gambar::findOrFail($id);
+            Log::info("Post with ID $id retrieved successfully");
+
+            return new GambarResource(true, 'Detail Data Post', $post);
+        } catch (\Exception $e) {
+            Log::error("Failed to retrieve post with ID: $id", ['error' => $e->getMessage()]);
+            return new GambarResource(false, 'Post dengan ID ' . $id . ' tidak ditemukan', '');
+        }
+    }
+
+    public function store(MachineLearningStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -65,7 +61,7 @@ class TokoController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(TokoUpdateRequest $request, $id): GambarResource
+    public function update(MachineLearningUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 

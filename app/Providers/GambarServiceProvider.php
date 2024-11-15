@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\Api\GambarMachineLearningController;
+use App\Http\Controllers\Api\MachineLearningImageController;
 use App\Providers\Services\GambarService;
 use Illuminate\Support\ServiceProvider;
 
@@ -13,9 +13,9 @@ class GambarServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(GambarMachineLearningController::class, function ($app) {
+        $this->app->singleton(MachineLearningImageController::class, function ($app) {
             $GambarService = $app->make(GambarService::class);
-            return new GambarMachineLearningController($GambarService);
+            return new MachineLearningImageController($GambarService);
         });
     }
 
