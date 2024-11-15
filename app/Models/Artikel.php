@@ -15,10 +15,10 @@ class Artikel extends Model
      */
     protected $fillable = [
         'user_id',
-        'judul',
-        'konten',
+        'title',
+        'content',
         'gambarUrl',
-        'durasi_baca',
+        'duration',
     ];
 
     /**

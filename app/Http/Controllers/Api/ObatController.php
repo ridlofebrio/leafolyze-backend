@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Obat;
-use App\Http\Controllers\Controller;
-use App\Providers\Services\ObatService;
 use App\Http\Requests\Api\ObatStoreRequest;
 use App\Http\Requests\Api\ObatUpdateRequest;
+use App\Models\Product;
+use App\Http\Controllers\Controller;
+use App\Providers\Services\ProductService;
+use App\Http\Requests\Api\ProductStoreRequest;
+use App\Http\Requests\Api\ProductUpdateRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\GambarResource;
 
 
-class ObatController extends Controller
+class ProductController extends Controller
 {
-    private ObatService $service;
-    public function __construct(ObatService $service)
+    private ProductService $service;
+    public function __construct(ProductService $service)
     {
         $this->service = $service;
     }
@@ -29,7 +31,7 @@ class ObatController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Obat::latest()->paginate(5);
+            $posts = Product::all();
             Log::info('Posts retrieved successfully');
             return new GambarResource(true, 'List Data Posts', $posts);
         } catch (\Exception $e) {
@@ -44,7 +46,7 @@ class ObatController extends Controller
     {
         try {
             Log::info("Attempting to retrieve post with ID: $id");
-            $post = Obat::findOrFail($id);
+            $post = Product::findOrFail($id);
             Log::info("Post with ID $id retrieved successfully");
             return new GambarResource(true, 'Detail Data Post', $post);
         } catch (\Exception $e) {

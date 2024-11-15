@@ -14,10 +14,10 @@ class UserDetail extends Model
      */
     protected $fillable = [
         'user_id',
-        'nama',
-        'tanggal_lahir',
-        'kelamin',
-        'alamat',
+        'name',
+        'birth',
+        'gender',
+        'address',
         'gambarUrl',
     ];
 

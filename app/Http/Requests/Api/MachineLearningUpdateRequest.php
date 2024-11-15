@@ -31,18 +31,18 @@ private $id;protected function passedValidation()
     public function rules(): array
     {
         return [
-            'image'   => 'image|mimes:jpeg,png,jpg',
+            'gambarUrl'   => 'image|mimes:jpeg,png,jpg',
             'user_id' => 'exists:users,id',
-            'deskripsi' => 'string'
+            'description' => 'string'
         ];
     }
 
 
     public function getFile(){
         return [
-            'gambarUrl' => $this->input('image'),
+            'gambarUrl' => $this->input('gambarUrl'),
             'user_id'   => $this->input('user_id'),
-            'deskripsi' => $this->input('deskripsi'),
+            'description' => $this->input('description'),
         ];
     }
 }

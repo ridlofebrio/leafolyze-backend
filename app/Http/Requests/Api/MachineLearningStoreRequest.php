@@ -29,7 +29,7 @@ class MachineLearningStoreRequest extends FormRequest
         return [
             'gambarUrl' => 'required|image|mimes:jpeg,png,jpg',
             'user_id' => 'required|unique:gambar,user_id',
-            'deskripsi' => 'string'
+            'description' => 'string'
         ];
     }
 
@@ -42,7 +42,7 @@ class MachineLearningStoreRequest extends FormRequest
         return [
             'gambarUrl' => $this->input('gambarUrl'),
             'user_id'   => $this->input('user_id'),
-            'deskripsi' => $this->input('deskripsi'),
+            'description' => $this->input('description'),
         ];
     }
 }

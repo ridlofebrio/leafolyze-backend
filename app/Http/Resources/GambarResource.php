@@ -10,7 +10,7 @@ class GambarResource extends JsonResource
     public $status;
     public $message;
     public $resource;
-    
+
     /**
      * __construct
      *
@@ -19,11 +19,12 @@ class GambarResource extends JsonResource
      * @param  mixed $resource
      * @return void
      */
-    public function __construct($status, $message, $resource)
+    public function __construct($success, $message, $data)
     {
-        parent::__construct($resource);
-        $this->status  = $status;
+        parent::__construct($data);
+        $this->success = $success;
         $this->message = $message;
+        $this->data = $data;
     }
 
     /**
@@ -35,9 +36,9 @@ class GambarResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'success'   => $this->status,
-            'message'   => $this->message,
-            'data'      => $this->resource
+            'success' => $this->success,
+            'message' => $this->message,
+            'data' => $this->data,
         ];
     }
 }

@@ -14,26 +14,26 @@ class ArtikelSeeder extends Seeder
     {
         Artikel::create([
             'user_id' => 1,
-            'judul' => 'Cara Merawat Tanaman',
-            'konten' => 'Panduan lengkap untuk merawat tanaman agar tetap sehat dan subur.',
+            'title' => 'Cara Merawat Tanaman',
+            'content' => 'Panduan lengkap untuk merawat tanaman agar tetap sehat dan subur.',
             'gambarUrl' => 'https://images.newscientist.com/wp-content/uploads/2024/09/06132745/iceland-2608985_1920.jpg?crop=3%3A2%2Csmart',
-            'durasi_baca' => 5,
+            'duration' => 5,
         ]);
 
         Artikel::create([
             'user_id' => 1,
-            'judul' => 'Penyakit pada Tanaman dan Cara Mengatasinya',
-            'konten' => 'Penjelasan tentang berbagai penyakit tanaman dan langkah-langkah untuk mengatasi.',
+            'title' => 'Penyakit pada Tanaman dan Cara Mengatasinya',
+            'content' => 'Penjelasan tentang berbagai penyakit tanaman dan langkah-langkah untuk mengatasi.',
             'gambarUrl' => 'https://images.newscientist.com/wp-content/uploads/2024/09/06132745/iceland-2608985_1920.jpg?crop=3%3A2%2Csmart',
-            'durasi_baca' => 8,
+            'duration' => 8,
         ]);
 
         Artikel::create([
             'user_id' => 1,
-            'judul' => 'Tips Bertanam di Musim Hujan',
-            'konten' => 'Tips dan trik agar tanaman tetap tumbuh subur di musim hujan.',
+            'title' => 'Tips Bertanam di Musim Hujan',
+            'content' => 'Tips dan trik agar tanaman tetap tumbuh subur di musim hujan.',
             'gambarUrl' => 'https://images.newscientist.com/wp-content/uploads/2024/09/06132745/iceland-2608985_1920.jpg?crop=3%3A2%2Csmart',
-            'durasi_baca' => 6,
+            'duration' => 6,
         ]);
     }
 }

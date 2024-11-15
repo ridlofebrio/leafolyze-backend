@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('obats', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('gambarUrl');
-            $table->string('namaObat');
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->text('deskripsi');
-            $table->string('harga');
-            $table->enum('jenis' , ['Bacterial Spot', 'Early Blight','Healthy','Late Blight','Leaf Mold','Target Spot','Black Spot']);
+            $table->string('name');
+            $table->foreignId('shop_id')->nullable()->constrained('shops')->onDelete('cascade');
+            $table->text('description');
+            $table->string('price');
+            $table->enum('type' , ['Bacterial Spot', 'Early Blight','Healthy','Late Blight','Leaf Mold','Target Spot','Black Spot']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('obats');
+        Schema::dropIfExists('products');
     }
 };

@@ -2,7 +2,7 @@
 
 namespace App\Providers\Services;
 
-use App\Models\Toko;
+use App\Models\Shop;
 use App\Providers\Services\Interface\CRUDInterface;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +13,7 @@ class TokoService implements  CRUDInterface
         try {
             Log::info('Uploading image to Cloudinary');
             Log::info($data);
-            $gambar = Toko::create($data);
+            $gambar = Shop::create($data);
             Log::info('Post created successfully', ['post_id' => $gambar->id]);
 
             return true;
@@ -26,7 +26,7 @@ class TokoService implements  CRUDInterface
     {
         try {
             Log::info("Attempting to update post with ID: $id");
-            $gambar = Toko::findOrFail($id)->update($data);
+            $gambar = Shop::findOrFail($id)->update($data);
             Log::info("Post with ID: $id updated successfully");
 
             return true;
@@ -39,7 +39,7 @@ class TokoService implements  CRUDInterface
     {
         try {
             Log::info("Attempting to delete post with ID: $id");
-            $gambar = Toko::findOrFail($id);
+            $gambar = Shop::findOrFail($id);
             $gambar->delete();
             Log::info("Post with ID: $id deleted successfully");
 
