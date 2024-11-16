@@ -5,19 +5,12 @@ namespace App\Http\Requests\Api;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ObatUpdateRequest extends FormRequest
+class ProductStoreRequest extends FormRequest
 {
-    use ImageTrait;
-    private $id;protected function passedValidation()
-
-{
-    $this->id = $this->route('id');
-    $this->handleUpload($this->id);
-}
-
     /**
      * Determine if the user is authorized to make this request.
      */
+    use ImageTrait;
     public function authorize(): bool
     {
         return true;
@@ -46,6 +39,10 @@ class ObatUpdateRequest extends FormRequest
             'type' => 'string',
         ];
     }
+    protected function passedValidation(){
+        $this->handleUpload();
+    }
+
     public function getFile()
     {
         return [

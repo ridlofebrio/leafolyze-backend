@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\ObatStoreRequest;
-use App\Http\Requests\Api\ObatUpdateRequest;
+use App\Http\Requests\Api\ProductStoreRequest;
+use App\Http\Requests\Api\ProductUpdateRequest;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use App\Providers\Services\ProductService;
-use App\Http\Requests\Api\ProductStoreRequest;
-use App\Http\Requests\Api\ProductUpdateRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\GambarResource;
 
@@ -58,7 +56,7 @@ class ProductController extends Controller
         }
     }
 
-    public function store(ObatStoreRequest $request): GambarResource
+    public function store(ProductStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -67,7 +65,7 @@ class ProductController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(ObatUpdateRequest $request, $id): GambarResource
+    public function update(ProductUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 
