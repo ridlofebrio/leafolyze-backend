@@ -5,9 +5,8 @@ namespace App\Http\Requests\Api;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class TokoUpdateRequest extends FormRequest
+class ProductUpdateRequest extends FormRequest
 {
-
     use ImageTrait;
     private $id;protected function passedValidation()
 
@@ -21,7 +20,7 @@ class TokoUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,26 +36,25 @@ class TokoUpdateRequest extends FormRequest
                 'image',
                 'mimes:jpeg,png,jpg',
             ],
-            'user_id' => [
+            'shop_id' => [
                 'required',
                 'exists:users,id',
             ],
-            'name' => 'string',
-            'address' => 'string',
-            'operational' => 'string',
             'description' => 'string',
+            'name' => 'string',
+            'price' => 'string',
+            'type' => 'string',
         ];
     }
-
     public function getFile()
     {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
-            'user_id' => $this->input('user_id'),
-            'name' => $this->input('name'),
-            'address' => $this->input('address'),
-            'operational' => $this->input('operational'),
+            'shop_id' => $this->input('shop_id'),
             'description' => $this->input('description'),
+            'name' => $this->input('name'),
+            'price' => $this->input('price'),
+            'type' => $this->input('type'),
         ];
     }
 }

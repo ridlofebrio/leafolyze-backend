@@ -5,15 +5,23 @@ namespace App\Http\Requests\Api;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ObatStoreRequest extends FormRequest
+class ShopUpdateRequest extends FormRequest
 {
+
+    use ImageTrait;
+    private $id;protected function passedValidation()
+
+{
+    $this->id = $this->route('id');
+    $this->handleUpload($this->id);
+}
+
     /**
      * Determine if the user is authorized to make this request.
      */
-    use ImageTrait;
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -29,29 +37,26 @@ class ObatStoreRequest extends FormRequest
                 'image',
                 'mimes:jpeg,png,jpg',
             ],
-            'shop_id' => [
+            'user_id' => [
                 'required',
                 'exists:users,id',
             ],
-            'description' => 'string',
             'name' => 'string',
-            'price' => 'string',
-            'type' => 'string',
+            'address' => 'string',
+            'operational' => 'string',
+            'description' => 'string',
         ];
-    }
-    protected function passedValidation(){
-        $this->handleUpload();
     }
 
     public function getFile()
     {
         return [
             'gambarUrl' => $this->input('gambarUrl'),
-            'shop_id' => $this->input('shop_id'),
-            'description' => $this->input('description'),
+            'user_id' => $this->input('user_id'),
             'name' => $this->input('name'),
-            'price' => $this->input('price'),
-            'type' => $this->input('type'),
+            'address' => $this->input('address'),
+            'operational' => $this->input('operational'),
+            'description' => $this->input('description'),
         ];
     }
 }

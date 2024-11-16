@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\TokoStoreRequest;
+use App\Http\Requests\Api\ShopStoreRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\TokoUpdateRequest;
+use App\Http\Requests\Api\ShopUpdateRequest;
 use App\Models\Shop;
 use App\Providers\Services\TokoService;
 use Illuminate\Support\Facades\Log;
@@ -56,7 +56,7 @@ class ShopController extends Controller
         }
     }
 
-    public function store(TokoStoreRequest $request): GambarResource
+    public function store(ShopStoreRequest $request): GambarResource
     {
         $success = $this->service->store($request->getFile());
 
@@ -65,7 +65,7 @@ class ShopController extends Controller
             new GambarResource(false, 'Gagal menambahkan gambar', '');
     }
 
-    public function update(TokoUpdateRequest $request, $id): GambarResource
+    public function update(ShopUpdateRequest $request, $id): GambarResource
     {
         $success = $this->service->update($id, $request->getFile());
 

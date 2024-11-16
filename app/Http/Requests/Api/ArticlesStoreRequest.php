@@ -5,7 +5,7 @@ namespace App\Http\Requests\Api;
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ArtikelStoreRequest extends FormRequest
+class ArticlesStoreRequest extends FormRequest
 {
     use ImageTrait;
     /**
