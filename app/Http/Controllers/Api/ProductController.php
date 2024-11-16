@@ -29,9 +29,9 @@ class ProductController extends Controller
     {
         try {
             Log::info('Attempting to retrieve posts');
-            $posts = Product::all();
+            $products = Product::with('shop')->get();
             Log::info('Posts retrieved successfully');
-            return new GambarResource(true, 'List Data Posts', $posts);
+            return new GambarResource(true, 'List Data Posts', $products);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
             return response()->json([
