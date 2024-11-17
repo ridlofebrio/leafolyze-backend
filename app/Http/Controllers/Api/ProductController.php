@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\Services\ProductService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\GambarResource;
+use Illuminate\Http\Request;
 
 
 class ProductController extends Controller
@@ -25,11 +26,13 @@ class ProductController extends Controller
      * @return GambarResource
      */
 
-    public function index()
+
+    public function index(Request $request)
     {
         try {
+            $type = ucwords(str_replace('-', ' ', ($request->query('type'))));
             Log::info('Attempting to retrieve posts');
-            $products = Product::with('shop')->get();
+            $products = ($type) ? Product::with('shop')->where('type', $type)->get() : Product::with('shop')->get();
             Log::info('Posts retrieved successfully');
             return new GambarResource(true, 'List Data Posts', $products);
         } catch (\Exception $e) {
@@ -40,6 +43,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
     public function show($id)
     {
         try {
