@@ -25,8 +25,8 @@ class Product extends Model
     /**
      * Relation to User.
      */
-    public function toko()
+    public function shop()
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 }
