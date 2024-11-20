@@ -6,6 +6,8 @@ use App\Services\ArticleService;
 use App\Services\AuthService;
 use App\Services\Interfaces\ArticleServiceInterface;
 use App\Services\Interfaces\AuthServiceInterface;
+use App\Services\Interfaces\ProductServiceInterface;
+use App\Services\ProductService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AuthServiceInterface::class, AuthService::class);
         $this->app->bind(ArticleServiceInterface::class, ArticleService::class);
+        $this->app->bind(ProductServiceInterface::class, ProductService::class);
     }
 
     /**
