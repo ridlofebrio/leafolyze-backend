@@ -8,7 +8,6 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Services\Interfaces\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Routing\Controllers\Middleware;
 
 class AuthController extends Controller
 {
