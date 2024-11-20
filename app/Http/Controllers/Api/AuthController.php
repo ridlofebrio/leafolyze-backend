@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\Interfaces\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\Middleware;
 
 class AuthController extends Controller
 {
@@ -43,6 +44,7 @@ class AuthController extends Controller
         }
     }
 
+    #[Middleware(['auth:api'])]
     public function logout(): JsonResponse
     {
         try {
@@ -59,6 +61,7 @@ class AuthController extends Controller
         }
     }
 
+    #[Middleware(['auth:api'])]
     public function refresh(): JsonResponse
     {
         try {
@@ -72,6 +75,7 @@ class AuthController extends Controller
         }
     }
 
+    #[Middleware(['auth:api'])]
     public function profile(): JsonResponse
     {
         try {

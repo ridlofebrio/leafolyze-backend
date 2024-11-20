@@ -6,9 +6,15 @@ use \App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
 // public
-Route::middleware(['throttle:6,1'])->group(function () {
+Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('register', [AuthController::class, 'register']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::get('profile', [AuthController::class, 'profile']);
+    });
 });
 
 // protected

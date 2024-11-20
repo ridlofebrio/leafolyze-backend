@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Auth;
+namespace App\Services;
 
 use App\Models\User;
 use App\Services\Interfaces\AuthServiceInterface;
@@ -30,7 +30,7 @@ class AuthService implements AuthServiceInterface
             $user = User::create([
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'access' => $data['access'] ?? 'petani', // default role
+                'access' => $data['access'] ?? 'petani',
             ]);
 
             // Create user details
@@ -42,7 +42,8 @@ class AuthService implements AuthServiceInterface
                 'gambarUrl' => $data['gambarUrl'] ?? null,
             ]);
 
-            $token = Auth::login($user);
+            Auth::login($user);
+            $token = Auth::tokenById($user->id);
             return $this->respondWithToken($token);
         } catch (\Exception $e) {
             Log::error('Registration error: ' . $e->getMessage());
@@ -74,7 +75,7 @@ class AuthService implements AuthServiceInterface
     public function profile()
     {
         try {
-            return Auth::user()->load('userDetail');
+            return Auth::user()->userDetail;
         } catch (\Exception $e) {
             Log::error('Profile fetch error: ' . $e->getMessage());
             throw $e;
@@ -87,7 +88,7 @@ class AuthService implements AuthServiceInterface
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
-            'user' => Auth::user()->load('userDetail')
+            'user' => Auth::user()->userDetail
         ];
     }
 }
