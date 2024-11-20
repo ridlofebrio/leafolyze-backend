@@ -9,6 +9,9 @@ class UserDetail extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_details';
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      */
@@ -18,7 +21,6 @@ class UserDetail extends Model
         'birth',
         'gender',
         'address',
-        'gambarUrl',
     ];
 
     /**

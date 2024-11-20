@@ -9,11 +9,13 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $table = 'products';
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'gambarUrl',
         'name',
         'shop_id',
         'description',

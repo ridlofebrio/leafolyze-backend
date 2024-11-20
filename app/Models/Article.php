@@ -9,6 +9,9 @@ class Article extends Model
 {
     use HasFactory;
 
+    protected $table = 'articles';
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      */
@@ -16,7 +19,6 @@ class Article extends Model
         'user_id',
         'title',
         'content',
-        'gambarUrl',
         'duration',
     ];
 

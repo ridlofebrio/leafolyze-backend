@@ -9,8 +9,10 @@ class TomatoLeafDetection extends Model
 {
     use HasFactory;
 
+    protected $table = 'tomato_leaf_detections';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
-        'gambarUrl',
         'user_id',
         'description',
     ];
