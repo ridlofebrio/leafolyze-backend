@@ -2,112 +2,136 @@
 
 namespace App\Services;
 
-use App\Models\File;
+use App\Models\Image;
+use App\Services\Interfaces\CloudinaryServiceInterface;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
-class CloudinaryService
+class CloudinaryService implements CloudinaryServiceInterface
 {
     /**
-     * Upload File To Cloudinary
+     * Upload a file to Cloudinary
      *
-     * @param $file
-     * @param $folder
+     * @param mixed $file
+     * @param string $folder
      * @return array
      */
-    public function uploadFileToCloudinary($file, $folder): array
+    public function uploadFile($file, string $folder): array
     {
-        if ($file instanceof \Illuminate\Http\UploadedFile) {
-            $cloudinary = $file->storeOnCloudinary($folder);
-        } else {
-            $cloudinary = Cloudinary::uploadFile($file, ['folder' => $folder]);
-        }
-        $cloudinaryFile = $cloudinary->getSecurePath();
-        $publicId = $cloudinary->getPublicId();
-
-        return [
-            'path' => $cloudinaryFile,
-            'publicId' => $publicId,
-        ];
-    }
-
-    /**
-     * Delete Multiple Files
-     *
-     * @param $files
-     * @return void
-     */
-    public function deleteFiles($files)
-    {
-        foreach ($files as $file) {
-            Cloudinary::destroy($file->publicId);
-            $file->delete();
-        }
-    }
-
-
-    /**
-     * Update Multiple Files
-     *
-     * @param $existingFiles
-     * @param $oldRequestData
-     * @param $imageRequestData
-     * @param $id
-     * @param $folder
-     * @return void
-     */
-    public function processFiles($existingFiles, $oldRequestData, $imageRequestData, $id, $folder)
-    {
-        foreach ($oldRequestData as $index => $oldRequestItem) {
-            if ($oldRequestItem === null && isset($existingFiles[$index])) {
-                $this->deleteFile($existingFiles[$index]);
-
-                if (isset($imageRequestData[$index])) {
-                    $this->createFile($imageRequestData[$index], $id, $folder);
-                }
-            } else if ($oldRequestItem !== null && !isset($existingFiles[$index]) && isset($imageRequestData[$index])) {
-                $this->createFile($imageRequestData[$index], $id, $folder);
+        try {
+            if ($file instanceof \Illuminate\Http\UploadedFile) {
+                $result = $file->storeOnCloudinary($folder);
+            } else {
+                $result = Cloudinary::uploadFile($file, ['folder' => $folder]);
             }
-        }
 
-        if (count($oldRequestData) > count($existingFiles)) {
-            for ($i = count($existingFiles); $i < count($oldRequestData); $i++) {
-                if (isset($imageRequestData[$i])) {
-                    $this->createFile($imageRequestData[$i], $id, $folder);
-                }
+            return [
+                'path' => $result->getSecurePath(),
+                'public_id' => $result->getPublicId(),
+            ];
+        } catch (\Exception $e) {
+            Log::error("Error uploading file to Cloudinary: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete a file from Cloudinary
+     *
+     * @param string $publicId
+     * @return bool
+     */
+    public function deleteFile(string $publicId): bool
+    {
+        try {
+            $result = Cloudinary::destroy($publicId);
+            return $result['result'] === 'ok';
+        } catch (\Exception $e) {
+            Log::error("Error deleting file from Cloudinary: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete multiple files from Cloudinary
+     *
+     * @param array $images
+     * @return void
+     */
+    public function deleteMultipleFiles(array $images): void
+    {
+        foreach ($images as $image) {
+            try {
+                $this->deleteFile($image->public_id);
+                $image->delete();
+            } catch (\Exception $e) {
+                Log::error("Error deleting image {$image->public_id}: " . $e->getMessage());
             }
         }
     }
 
+
     /**
-     * Delete File
+     * Process multiple images (create, update, delete)
      *
-     * @param $file
+     * @param array $existingImages
+     * @param array $oldRequestData
+     * @param array $newRequestData
+     * @param int $modelId
+     * @param string $folder
      * @return void
      */
-    private function deleteFile($file)
+    public function processImages(array $existingImages, array $oldRequestData, array $newRequestData, int $modelId, string $folder): void
     {
-        Cloudinary::destroy($file->publicId);
-        $file->delete();
+        try {
+            foreach ($oldRequestData as $index => $oldRequestItem) {
+                if ($oldRequestItem === null && isset($existingImages[$index])) {
+                    // Delete old image
+                    $this->deleteFile($existingImages[$index]->public_id);
+                    $existingImages[$index]->delete();
+
+                    // Upload new image if exists
+                    if (isset($newRequestData[$index])) {
+                        $this->createImage($newRequestData[$index], $modelId, $folder);
+                    }
+                } elseif ($oldRequestItem !== null && !isset($existingImages[$index]) && isset($newRequestData[$index])) {
+                    // Create new image
+                    $this->createImage($newRequestData[$index], $modelId, $folder);
+                }
+            }
+
+            // Handle additional new images
+            if (count($oldRequestData) > count($existingImages)) {
+                for ($i = count($existingImages); $i < count($oldRequestData); $i++) {
+                    if (isset($newRequestData[$i])) {
+                        $this->createImage($newRequestData[$i], $modelId, $folder);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Error processing images: " . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**
-     * Create File
+     * Create a new image record
      *
-     * @param $newFile
-     * @param $id
-     * @param $folder
-     * @return void
+     * @param mixed $file
+     * @param int $modelId
+     * @param string $folder
+     * @return Image
      */
-    private function createFile($newFile, $id, $folder)
+    private function createImage($file, int $modelId, string $folder): Image
     {
-        $cloudinaryData = $this->uploadFileToCloudinary($newFile, $folder);
+        $cloudinaryData = $this->uploadFile($file, $folder);
 
-        File::create([
-            'id_' . $folder => $id,
+        return Image::create([
+            $folder . '_id' => $modelId,
             'type' => $folder,
             'path' => $cloudinaryData['path'],
-            'publicId' => $cloudinaryData['publicId'],
-            'name' => $newFile->getClientOriginalName(),
+            'public_id' => $cloudinaryData['public_id'],
+            'name' => $file->getClientOriginalName(),
         ]);
     }
 }

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('path');
             $table->string('public_id');
+            $table->enum('type', ['article', 'user_details', 'tomato_leaf_detection', 'shop', 'product']);
             $table->foreignId('article_id')->constrained('articles')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_details_id')->constrained('user_details')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('tomato_leaf_detections_id')->constrained('tomato_leaf_detections')->onDelete('cascade')->onUpdate('cascade');
