@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('title');
+            $table->text('content');
             $table->string('gambarUrl');
-            $table->string('name');
-            $table->foreignId('shop_id')->nullable()->constrained('shops')->onDelete('cascade');
-            $table->text('description');
-            $table->string('price');
-            $table->enum('type' , ['Bacterial Spot', 'Early Blight','Healthy','Late Blight','Leaf Mold','Target Spot','Black Spot']);
+            $table->integer('duration');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('articles');
     }
 };

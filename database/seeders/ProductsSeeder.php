@@ -5,38 +5,39 @@ namespace Database\Seeders;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
-class ObatSeeder extends Seeder
+class ProductsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        $img = 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200';
         Product::create([
-            'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
+            'gambarUrl' => $img,
             'name' => 'Obat Bacterial Spot',
             'shop_id' => 3,
             'description' => 'Obat ini digunakan untuk mengobati penyakit Bacterial Spot pada tanaman.',
-            'price' => '50000',
-            'type' => 'Bacterial Spot',
+            'price' => 50000,
+            'disease_id' => 1,
         ]);
 
         Product::create([
-            'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
+            'gambarUrl' => $img,
             'name' => 'Obat Early Blight',
             'shop_id' => 3,
             'description' => 'Obat ini digunakan untuk mengobati penyakit Early Blight pada tanaman.',
-            'price' => '45000',
-            'type' => 'Early Blight',
+            'price' => 45000,
+            'disease_id' => 2,
         ]);
 
         Product::create([
-            'gambarUrl' => 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200',
+            'gambarUrl' => $img,
             'name' => 'Obat Healthy',
             'shop_id' => 3,
             'description' => 'Obat ini untuk menjaga kesehatan tanaman agar tetap sehat.',
-            'price' => '55000',
-            'type' => 'Healthy',
+            'price' => 55000,
+            'disease_id' => 3,
         ]);
     }
 }

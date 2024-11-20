@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Product extends Model
 {
@@ -19,7 +18,7 @@ class Product extends Model
         'shop_id',
         'description',
         'price',
-        'type',
+        'disease_id',
     ];
 
     /**
@@ -28,5 +27,13 @@ class Product extends Model
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    /**
+     * Relation to Disease.
+     */
+    public function disease()
+    {
+        return $this->belongsTo(Disease::class, 'disease_id');
     }
 }

@@ -31,12 +31,11 @@ class ProductController extends Controller
     {
         try {
             $type = ucwords(str_replace('-', ' ', ($request->query('type'))));
-            Log::info('Attempting to retrieve posts');
-            $products = ($type) ? Product::with('shop')->where('type', $type)->get() : Product::with('shop')->get();
-            Log::info('Posts retrieved successfully');
+            $products = ($type) ?
+                Product::with('shop')->where('type', $type)->get() :
+                Product::with('shop')->get();
             return new GambarResource(true, 'List Data Posts', $products);
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengambil data post',

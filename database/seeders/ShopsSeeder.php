@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Shop;
 
-class TokoSeeder extends Seeder
+class ShopsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
