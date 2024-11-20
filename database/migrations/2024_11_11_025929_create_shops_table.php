@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('address');
             $table->string('description');
             $table->string('operational');
-            $table->string('gambarUrl');
             $table->timestamps();
         });
     }

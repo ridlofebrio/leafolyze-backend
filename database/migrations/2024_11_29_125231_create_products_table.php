@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('gambarUrl');
             $table->string('name');
             $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
             $table->text('description');

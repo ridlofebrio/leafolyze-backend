@@ -28,7 +28,6 @@ return new class extends Migration
             $table->date('birth');
             $table->string('gender');
             $table->string('address');
-            $table->string('gambarUrl');
             $table->timestamps();
         });
 

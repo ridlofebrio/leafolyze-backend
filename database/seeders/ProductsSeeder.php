@@ -12,9 +12,7 @@ class ProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        $img = 'https://awsimages.detik.net.id/community/media/visual/2021/10/20/manfaat-jamu-kelor-3_169.jpeg?w=1200';
         Product::create([
-            'gambarUrl' => $img,
             'name' => 'Obat Bacterial Spot',
             'shop_id' => 3,
             'description' => 'Obat ini digunakan untuk mengobati penyakit Bacterial Spot pada tanaman.',
@@ -23,7 +21,6 @@ class ProductsSeeder extends Seeder
         ]);
 
         Product::create([
-            'gambarUrl' => $img,
             'name' => 'Obat Early Blight',
             'shop_id' => 3,
             'description' => 'Obat ini digunakan untuk mengobati penyakit Early Blight pada tanaman.',
@@ -32,7 +29,6 @@ class ProductsSeeder extends Seeder
         ]);
 
         Product::create([
-            'gambarUrl' => $img,
             'name' => 'Obat Healthy',
             'shop_id' => 3,
             'description' => 'Obat ini untuk menjaga kesehatan tanaman agar tetap sehat.',
