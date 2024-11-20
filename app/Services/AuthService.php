@@ -72,16 +72,6 @@ class AuthService implements AuthServiceInterface
         }
     }
 
-    public function profile()
-    {
-        try {
-            return Auth::user()->userDetail;
-        } catch (\Exception $e) {
-            Log::error('Profile fetch error: ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
     private function respondWithToken($token)
     {
         return [

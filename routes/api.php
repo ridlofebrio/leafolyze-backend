@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DetectionController;
 use App\Http\Controllers\Api\MachineLearningImageController;
 use App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -14,7 +15,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::post('refresh', [AuthController::class, 'refresh']);
-        Route::get('profile', [AuthController::class, 'profile']);
     });
 });
 
@@ -50,4 +50,10 @@ Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function ()
     Route::post('/', [DetectionController::class, 'store']);
     Route::put('/{id}', [DetectionController::class, 'update']);
     Route::delete('/{id}', [DetectionController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
+    Route::get('/', [ProfileController::class, 'show']);
+    Route::post('/update', [ProfileController::class, 'update']);
+    Route::post('/password', [ProfileController::class, 'updatePassword']);
 });

@@ -71,17 +71,4 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
-    public function profile(): JsonResponse
-    {
-        try {
-            $result = $this->authService->profile();
-            return ApiResponse::success('Profile retrieved successfully', $result)->response();
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    }
 }
