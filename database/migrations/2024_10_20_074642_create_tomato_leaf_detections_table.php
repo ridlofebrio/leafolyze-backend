@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tomato_leaf_detections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->text('description');
+            $table->string('title');
             $table->timestamps();
         });
     }

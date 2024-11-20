@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\DetectionController;
 use App\Http\Controllers\Api\MachineLearningImageController;
 use App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
@@ -41,4 +42,12 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth:api'], function () {
         Route::put('/{id}', [ProductController::class, 'update']);
         Route::delete('/{id}', [ProductController::class, 'destroy']);
     });
+});
+
+Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function () {
+    Route::get('/', [DetectionController::class, 'index']);
+    Route::get('/{id}', [DetectionController::class, 'show']);
+    Route::post('/', [DetectionController::class, 'store']);
+    Route::put('/{id}', [DetectionController::class, 'update']);
+    Route::delete('/{id}', [DetectionController::class, 'destroy']);
 });

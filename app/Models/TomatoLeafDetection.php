@@ -14,7 +14,7 @@ class TomatoLeafDetection extends Model
 
     protected $fillable = [
         'user_id',
-        'description',
+        'title',
     ];
 
     /**
@@ -32,5 +32,13 @@ class TomatoLeafDetection extends Model
     {
         return $this->belongsToMany(Disease::class, 'detection_disease', 'detection_id', 'disease_id')
             ->withTimestamps();
+    }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'tomato_leaf_detection_id');
     }
 }

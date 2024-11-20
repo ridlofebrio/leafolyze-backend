@@ -17,13 +17,13 @@ class TomatoLeafDetectionsSeeder extends Seeder
         DB::table('tomato_leaf_detections')->insert([
             [
                 'user_id' => 1,
-                'description' => 'Detected multiple diseases.',
+                'title' => 'My Plant 1',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'user_id' => 2,
-                'description' => 'Healthy leaf.',
+                'title' => 'My Plant 2',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],

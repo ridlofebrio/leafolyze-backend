@@ -44,6 +44,6 @@ class UserDetail extends Model
      */
     public function image()
     {
-        return $this->hasOne(Image::class, 'user_details_id');
+        return $this->hasOne(Image::class, 'user_detail_id');
     }
 }

@@ -47,7 +47,7 @@ class ProductService implements ProductServiceInterface
         }
     }
 
-     public function getProductsByDisease(int $diseaseId)
+    public function getProductsByDisease(int $diseaseId)
     {
         try {
             return Product::with(['shop', 'image', 'disease'])
