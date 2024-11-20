@@ -13,21 +13,18 @@ class ArticlesSeeder extends Seeder
     public function run(): void
     {
         Article::create([
-            'user_id' => 1,
             'title' => 'Cara Merawat Tanaman',
             'content' => 'Panduan lengkap untuk merawat tanaman agar tetap sehat dan subur.',
             'duration' => 5,
         ]);
 
         Article::create([
-            'user_id' => 1,
             'title' => 'Penyakit pada Tanaman dan Cara Mengatasinya',
             'content' => 'Penjelasan tentang berbagai penyakit tanaman dan langkah-langkah untuk mengatasi.',
             'duration' => 8,
         ]);
 
         Article::create([
-            'user_id' => 1,
             'title' => 'Tips Bertanam di Musim Hujan',
             'content' => 'Tips dan trik agar tanaman tetap tumbuh subur di musim hujan.',
             'duration' => 6,

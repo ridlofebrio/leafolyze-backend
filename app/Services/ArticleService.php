@@ -17,7 +17,7 @@ class ArticleService implements ArticleServiceInterface
     public function getAllArticles()
     {
         try {
-            return Article::with('user.userDetail')->latest()->get();
+            return Article::with('image')->latest()->get();
         } catch (\Exception $e) {
             Log::error('Error fetching articles: ' . $e->getMessage());
             throw $e;
@@ -27,7 +27,7 @@ class ArticleService implements ArticleServiceInterface
     public function getArticleById(int $id)
     {
         try {
-            return Article::with('user.userDetail')->findOrFail($id);
+            return Article::with('image')->findOrFail($id);
         } catch (\Exception $e) {
             Log::error("Error fetching article ID {$id}: " . $e->getMessage());
             throw $e;
@@ -42,7 +42,6 @@ class ArticleService implements ArticleServiceInterface
                 $data['gambarUrl'] = $uploadResult['path'];
             }
 
-            $data['user_id'] = Auth::id();
             return Article::create($data);
         } catch (\Exception $e) {
             Log::error('Error creating article: ' . $e->getMessage());

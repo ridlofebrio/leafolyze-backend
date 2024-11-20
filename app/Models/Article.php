@@ -23,14 +23,6 @@ class Article extends Model
     ];
 
     /**
-     * Relation to User.
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
      * Relation to Image.
      */
     public function image()
