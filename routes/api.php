@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\MachineLearningImageController;
 use App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
 
-// public
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
@@ -17,12 +17,14 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-// protected
-Route::middleware('auth:api')->group(function () {
-    Route::get('me', [AuthController::class, 'me']);
-    Route::post('logout', [AuthController::class, 'logout']);
-    Route::apiResource('/products', ProductController::class)->except(['edit', 'create']);
-    Route::apiResource('/machinelearning', MachineLearningImageController::class)->except(['edit', 'create']);
-    Route::apiResource('/articles', \App\Http\Controllers\Api\ArticleController::class)->except(['edit', 'create']);
-    Route::apiResource('/shop', \App\Http\Controllers\Api\ShopController::class)->except(['edit', 'create']);
+Route::group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () {
+    Route::get('/', [ArticleController::class, 'index']);
+    Route::get('/{id}', [ArticleController::class, 'show']);
+
+    // Admin only routes
+    Route::middleware(['auth:api'])->group(function () {
+        Route::post('/', [ArticleController::class, 'store']);
+        Route::put('/{id}', [ArticleController::class, 'update']);
+        Route::delete('/{id}', [ArticleController::class, 'destroy']);
+    });
 });
