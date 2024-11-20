@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Article\CreateArticleRequest;
-use App\Http\Requests\Article\UpdateArticleRequest;
+use App\Http\Requests\Api\Articles\CreateArticleRequest;
+use App\Http\Requests\Api\Articles\UpdateArticleRequest;
 use App\Http\Resources\Api\ApiResponse;
+use App\Models\Article;
 use App\Services\Interfaces\ArticleServiceInterface;
 use Illuminate\Http\JsonResponse;
 
@@ -62,6 +63,12 @@ class ArticleController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
+            if (auth()->user()->access !== 'admin') {
+                return ApiResponse::error('Unauthorized. Only admin can delete articles.')
+                    ->response()
+                    ->setStatusCode(403);
+            }
+
             $this->articleService->deleteArticle($id);
             return ApiResponse::success('Article deleted successfully')->response();
         } catch (\Exception $e) {

@@ -37,7 +37,6 @@ class ArticleService implements ArticleServiceInterface
     public function createArticle(array $data)
     {
         try {
-            // Upload image to Cloudinary if exists
             if (isset($data['image'])) {
                 $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'articles');
                 $data['gambarUrl'] = $uploadResult['path'];
@@ -56,9 +55,7 @@ class ArticleService implements ArticleServiceInterface
         try {
             $article = Article::findOrFail($id);
 
-            // Handle image update if new image is provided
             if (isset($data['image'])) {
-                // Upload new image
                 $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'articles');
                 $data['gambarUrl'] = $uploadResult['path'];
 
@@ -83,6 +80,10 @@ class ArticleService implements ArticleServiceInterface
     {
         try {
             $article = Article::findOrFail($id);
+
+            if (Auth::user()->access !== 'admin') {
+                throw new \Exception('Unauthorized. Only admin can delete articles.');
+            }
 
             // Delete image from Cloudinary if exists
             if ($article->gambarUrl) {

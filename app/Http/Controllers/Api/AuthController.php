@@ -17,6 +17,7 @@ class AuthController extends Controller
     public function __construct(AuthServiceInterface $authService)
     {
         $this->authService = $authService;
+        $this->middleware('auth:api')->except(['login', 'register']);
     }
 
     public function login(LoginRequest $request): JsonResponse
@@ -45,7 +46,6 @@ class AuthController extends Controller
         }
     }
 
-    #[Middleware(['auth:api'])]
     public function logout(): JsonResponse
     {
         try {
@@ -59,7 +59,6 @@ class AuthController extends Controller
         }
     }
 
-    #[Middleware(['auth:api'])]
     public function refresh(): JsonResponse
     {
         try {
@@ -73,7 +72,6 @@ class AuthController extends Controller
         }
     }
 
-    #[Middleware(['auth:api'])]
     public function profile(): JsonResponse
     {
         try {
