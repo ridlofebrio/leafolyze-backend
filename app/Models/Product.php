@@ -24,7 +24,7 @@ class Product extends Model
     ];
 
     /**
-     * Relation to User.
+     * Relation to Shop.
      */
     public function shop()
     {
