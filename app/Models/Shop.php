@@ -38,4 +38,12 @@ class Shop extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'shop_id');
+    }
 }

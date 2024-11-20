@@ -30,4 +30,20 @@ class UserDetail extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    /**
+     * Relation to Detection.
+     */
+    public function detections()
+    {
+        return $this->hasMany(TomatoLeafDetection::class);
+    }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'user_details_id');
+    }
 }
