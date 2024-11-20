@@ -29,21 +29,21 @@ class Image extends Model
 
     public function userDetail(): BelongsTo
     {
-        return $this->belongsTo(UserDetail::class, 'user_details_id', 'id');
+        return $this->belongsTo(UserDetail::class, 'user_detail_id', 'id');
     }
 
     public function tomatoLeafDetection(): BelongsTo
     {
-        return $this->belongsTo(TomatoLeafDetection::class, 'tomato_leaf_detections_id', 'id');
+        return $this->belongsTo(TomatoLeafDetection::class, 'tomato_leaf_detection_id', 'id');
     }
 
     public function shop(): BelongsTo
     {
-        return $this->belongsTo(Shop::class, 'shops_id', 'id');
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'products_id', 'id');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

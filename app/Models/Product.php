@@ -36,4 +36,12 @@ class Product extends Model
     {
         return $this->belongsTo(Disease::class, 'disease_id');
     }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasMany(Image::class, 'product_id');
+    }
 }

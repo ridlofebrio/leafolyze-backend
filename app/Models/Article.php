@@ -27,4 +27,12 @@ class Article extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasMany(Image::class, 'articles_id');
+    }
 }
