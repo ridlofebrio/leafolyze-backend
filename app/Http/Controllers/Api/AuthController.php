@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\Api\ApiResponse;
 use App\Services\Interfaces\AuthServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controllers\Middleware;
@@ -22,7 +23,7 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->login($request->validated());
-            return response()->json($result);
+            return ApiResponse::success('Login successful', $result)->response();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -35,7 +36,7 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->register($request->validated());
-            return response()->json($result, 201);
+            return ApiResponse::success('Register successful', $result)->response();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -49,10 +50,7 @@ class AuthController extends Controller
     {
         try {
             $this->authService->logout();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Successfully logged out'
-            ]);
+            return ApiResponse::success('Successfully logged out')->response();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -66,7 +64,7 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->refresh();
-            return response()->json($result);
+            return ApiResponse::success('Refresh successful', $result)->response();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -80,7 +78,7 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->profile();
-            return response()->json($result);
+            return ApiResponse::success('Profile retrieved successfully', $result)->response();
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
