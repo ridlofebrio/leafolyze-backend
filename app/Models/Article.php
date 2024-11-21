@@ -27,6 +27,6 @@ class Article extends Model
      */
     public function image()
     {
-        return $this->hasOne(Image::class, 'articles_id');
+        return $this->hasOne(Image::class, 'article_id');
     }
 }

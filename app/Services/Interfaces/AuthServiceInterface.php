@@ -8,4 +8,5 @@ interface AuthServiceInterface
     public function register(array $data);
     public function logout();
     public function refresh();
+    public function me();
 }

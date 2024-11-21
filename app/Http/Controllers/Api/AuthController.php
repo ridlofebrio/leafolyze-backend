@@ -70,4 +70,10 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+    public function me(): JsonResponse
+    {
+        $result = $this->authService->me();
+        return ApiResponse::success('User detail', $result)->response();
+    }
 }
