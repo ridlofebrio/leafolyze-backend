@@ -4,29 +4,46 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Product extends Model
 {
     use HasFactory;
 
+    protected $table = 'products';
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'gambarUrl',
         'name',
         'shop_id',
         'description',
         'price',
-        'type',
+        'disease_id',
     ];
 
     /**
-     * Relation to User.
+     * Relation to Shop.
      */
     public function shop()
     {
         return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
+    /**
+     * Relation to Disease.
+     */
+    public function disease()
+    {
+        return $this->belongsTo(Disease::class, 'disease_id');
+    }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'product_id');
     }
 }

@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
     use HasFactory;
+
+    protected $table = 'articles';
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -17,15 +19,14 @@ class Article extends Model
         'user_id',
         'title',
         'content',
-        'gambarUrl',
         'duration',
     ];
 
     /**
-     * Relation to User.
+     * Relation to Image.
      */
-    public function user()
+    public function image()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Image::class, 'articles_id');
     }
 }
