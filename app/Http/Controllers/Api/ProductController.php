@@ -2,88 +2,103 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\ProductStoreRequest;
-use App\Http\Requests\Api\ProductUpdateRequest;
-use App\Models\Product;
 use App\Http\Controllers\Controller;
-use App\Providers\Services\ProductService;
-use Illuminate\Support\Facades\Log;
-use App\Http\Resources\GambarResource;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\Product\CreateProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
+use App\Http\Resources\Api\ApiResponse;
+use App\Services\Interfaces\ProductServiceInterface;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    private ProductService $service;
-    public function __construct(ProductService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        protected ProductServiceInterface $productService
+    ) {
+        $this->middleware('auth:api');
     }
 
-    /**
-     * index
-     *
-     * @return GambarResource
-     */
-
-
-    public function index(Request $request)
+    public function index(): JsonResponse
     {
         try {
-            $type = ucwords(str_replace('-', ' ', ($request->query('type'))));
-            Log::info('Attempting to retrieve posts');
-            $products = ($type) ? Product::with('shop')->where('type', $type)->get() : Product::with('shop')->get();
-            Log::info('Posts retrieved successfully');
-            return new GambarResource(true, 'List Data Posts', $products);
+            $products = $this->productService->getAllProducts();
+            return ApiResponse::success('Products retrieved successfully', $products)->response();
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengambil data post',
-            ], 500);
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(500);
         }
     }
 
-    public function show($id)
+    public function show(int $id): JsonResponse
     {
         try {
-            Log::info("Attempting to retrieve post with ID: $id");
-            $post = Product::findOrFail($id);
-            Log::info("Post with ID $id retrieved successfully");
-            return new GambarResource(true, 'Detail Data Post', $post);
+            $product = $this->productService->getProductById($id);
+            return ApiResponse::success('Product retrieved successfully', $product)->response();
         } catch (\Exception $e) {
-            Log::error("Failed to retrieve post with ID: $id", ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Post dengan ID ' . $id . ' tidak ditemukan',
-            ], 500);
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(404);
         }
     }
 
-    public function store(ProductStoreRequest $request): GambarResource
+    public function store(CreateProductRequest $request): JsonResponse
     {
-        $success = $this->service->store($request->getFile());
-
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil ditambahkan!', '') :
-            new GambarResource(false, 'Gagal menambahkan gambar', '');
+        try {
+            $product = $this->productService->createProduct($request->validated());
+            return ApiResponse::success('Product created successfully', $product)
+                ->response()
+                ->setStatusCode(201);
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
     }
 
-    public function update(ProductUpdateRequest $request, $id): GambarResource
+    public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
-        $success = $this->service->update($id, $request->getFile());
-
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil diupdate', '') :
-            new GambarResource(false, 'Gagal mengupdate gambar', '');
+        try {
+            $product = $this->productService->updateProduct($id, $request->validated());
+            return ApiResponse::success('Product updated successfully', $product)->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
     }
 
-    public function destroy($id): GambarResource
+    public function destroy(int $id): JsonResponse
     {
-        $success = $this->service->delete($id);
+        try {
+            $this->productService->deleteProduct($id);
+            return ApiResponse::success('Product deleted successfully')->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
+    }
 
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil dihapus', '') :
-            new GambarResource(false, 'Gagal menghapus gambar', '');
+    public function byShop(int $shopId): JsonResponse
+    {
+        try {
+            $products = $this->productService->getProductsByShop($shopId);
+            return ApiResponse::success('Shop products retrieved successfully', $products)->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(404);
+        }
+    }
+
+    public function byDisease(int $diseaseId): JsonResponse
+    {
+        try {
+            $products = $this->productService->getProductsByDisease($diseaseId);
+
+            if ($products->isEmpty()) {
+                return ApiResponse::success(
+                    "No products found for disease ID: {$diseaseId}",
+                    []
+                )->response();
+            }
+
+            return ApiResponse::success(
+                "Products retrieved successfully",
+                $products
+            )->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())
+                ->response()
+                ->setStatusCode(400);
+        }
     }
 }

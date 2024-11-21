@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Shop extends Model
 {
     use HasFactory;
+
+    protected $table = 'shops';
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +21,6 @@ class Shop extends Model
         'address',
         'description',
         'operational',
-        'gambarUrl',
     ];
 
     /**
@@ -27,6 +28,22 @@ class Shop extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    /**
+     * Relation to Product.
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Relation to Image.
+     */
+    public function image()
+    {
+        return $this->hasOne(Image::class, 'shop_id');
     }
 }
