@@ -82,6 +82,6 @@ class AuthService implements AuthServiceInterface
 
     public function me()
     {
-        return Auth::user()->userDetail;
+        return Auth::user();
     }
 }
