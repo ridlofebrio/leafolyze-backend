@@ -39,7 +39,6 @@ class AuthService implements AuthServiceInterface
                 'birth' => $data['birth'],
                 'gender' => $data['gender'],
                 'address' => $data['address'],
-                'gambarUrl' => $data['gambarUrl'] ?? null,
             ]);
 
             Auth::login($user);
@@ -78,7 +77,11 @@ class AuthService implements AuthServiceInterface
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
-            'user' => Auth::user()->userDetail
         ];
+    }
+
+    public function me()
+    {
+        return Auth::user()->userDetail;
     }
 }
