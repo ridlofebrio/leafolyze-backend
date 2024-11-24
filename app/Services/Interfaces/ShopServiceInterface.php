@@ -36,4 +36,6 @@ interface ShopServiceInterface
      * @return bool
      */
     public function deleteShop(int $shopId);
+    public function getAllShop();
+    public function getShopById(int $id);
 }

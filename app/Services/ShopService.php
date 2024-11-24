@@ -111,4 +111,23 @@ class ShopService implements ShopServiceInterface
             throw $e;
         }
     }
+    public function getAllShop()
+    {
+        try {
+            return Shop::with('image')->latest()->get();
+        } catch (\Exception $e) {
+            Log::error('Error fetching articles: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getShopById(int $id)
+    {
+        try {
+            return Shop::with('image')->findOrFail($id);
+        } catch (\Exception $e) {
+            Log::error("Error fetching article ID {$id}: " . $e->getMessage());
+            throw $e;
+        }
+    }
 }

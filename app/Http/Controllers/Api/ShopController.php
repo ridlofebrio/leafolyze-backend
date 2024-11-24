@@ -22,40 +22,28 @@ class ShopController extends Controller
     public function index()
     {
         try {
-            Log::info('Attempting to retrieve shops');
-            $shops = Shop::all();
-            Log::info('Shops retrieved successfully');
-            return new ApiResponse(true, 'List of Shops', $shops);
+            $shops = $this->service->getAllShop();
+            return ApiResponse::success('shops retrieved successfully', $shops)->response();
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve shops', ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve shop data',
-            ], 500);
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(500);
         }
     }
 
     public function show($id)
     {
         try {
-            Log::info("Attempting to retrieve shop with ID: $id");
-            $shop = Shop::findOrFail($id);
-            Log::info("Shop with ID $id retrieved successfully");
-            return new ApiResponse(true, 'Shop Details', $shop);
+            $shop = $this->service->getShopById($id);
+            return ApiResponse::success('shop retrieved successfully', $shop)->response();
         } catch (\Exception $e) {
-            Log::error("Failed to retrieve shop with ID: $id", ['error' => $e->getMessage()]);
-            return response()->json([
-                'success' => false,
-                'message' => 'Shop with ID ' . $id . ' not found',
-            ], 500);
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(404);
         }
     }
 
     public function store(CreateShopRequest $request): JsonResponse
     {
         try {
-            $article = $this->service->createShop($request->validated());
-            return ApiResponse::success('Article created successfully', $article)
+            $shop = $this->service->createShop($request->validated());
+            return ApiResponse::success('shop created successfully', $shop)
                 ->response()
                 ->setStatusCode(201);
         } catch (\Exception $e) {
@@ -66,8 +54,8 @@ class ShopController extends Controller
     public function update(CreateShopRequest $request, $id): JsonResponse
     {
         try {
-            $article = $this->service->updateShop($id, $request->validated());
-            return ApiResponse::success('Article updated successfully', $article)->response();
+            $shop = $this->service->updateShop($id, $request->validated());
+            return ApiResponse::success('shop updated successfully', $shop)->response();
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
         }
@@ -77,7 +65,7 @@ class ShopController extends Controller
     {
         try {
             $this->service->deleteShop($id);
-            return ApiResponse::success('Article deleted successfully')->response();
+            return ApiResponse::success('shop deleted successfully')->response();
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
         }
