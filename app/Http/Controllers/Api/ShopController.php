@@ -2,84 +2,84 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\Api\ShopStoreRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ShopUpdateRequest;
+use App\Http\Requests\Api\CreateShopRequest;
+use App\Http\Resources\Api\ApiResponse;
 use App\Models\Shop;
-use App\Providers\Services\TokoService;
+use App\Services\ShopService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Resources\GambarResource;
-
 
 class ShopController extends Controller
 {
-    private TokoService $service;
-    public function __construct(TokoService $service)
+    private ShopService $service;
+
+    public function __construct(ShopService $service)
     {
         $this->service = $service;
     }
 
-    /**
-     * index
-     *
-     * @return GambarResource
-     */
-
     public function index()
     {
         try {
-            Log::info('Attempting to retrieve posts');
-            $posts = Shop::all();
-            Log::info('Posts retrieved successfully');
-            return new GambarResource(true, 'List Data Posts', $posts);
+            Log::info('Attempting to retrieve shops');
+            $shops = Shop::all();
+            Log::info('Shops retrieved successfully');
+            return new ApiResponse(true, 'List of Shops', $shops);
         } catch (\Exception $e) {
-            Log::error('Failed to retrieve posts', ['error' => $e->getMessage()]);
+            Log::error('Failed to retrieve shops', ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal mengambil data post',
+                'message' => 'Failed to retrieve shop data',
             ], 500);
         }
     }
+
     public function show($id)
     {
         try {
-            Log::info("Attempting to retrieve post with ID: $id");
-            $post = Shop::findOrFail($id);
-            Log::info("Post with ID $id retrieved successfully");
-            return new GambarResource(true, 'Detail Data Post', $post);
+            Log::info("Attempting to retrieve shop with ID: $id");
+            $shop = Shop::findOrFail($id);
+            Log::info("Shop with ID $id retrieved successfully");
+            return new ApiResponse(true, 'Shop Details', $shop);
         } catch (\Exception $e) {
-            Log::error("Failed to retrieve post with ID: $id", ['error' => $e->getMessage()]);
+            Log::error("Failed to retrieve shop with ID: $id", ['error' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Post dengan ID ' . $id . ' tidak ditemukan',
+                'message' => 'Shop with ID ' . $id . ' not found',
             ], 500);
         }
     }
 
-    public function store(ShopStoreRequest $request): GambarResource
+    public function store(CreateShopRequest $request): JsonResponse
     {
-        $success = $this->service->store($request->getFile());
-
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil ditambahkan!', '') :
-            new GambarResource(false, 'Gagal menambahkan gambar', '');
+        try {
+            $article = $this->service->createShop($request->validated());
+            return ApiResponse::success('Article created successfully', $article)
+                ->response()
+                ->setStatusCode(201);
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
     }
 
-    public function update(ShopUpdateRequest $request, $id): GambarResource
+    public function update(CreateShopRequest $request, $id): JsonResponse
     {
-        $success = $this->service->update($id, $request->getFile());
-
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil diupdate', '') :
-            new GambarResource(false, 'Gagal mengupdate gambar', '');
+        try {
+            $article = $this->service->updateShop($id, $request->validated());
+            return ApiResponse::success('Article updated successfully', $article)->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
     }
 
-    public function destroy($id): GambarResource
+    public function destroy($id): JsonResponse
     {
-        $success = $this->service->delete($id);
-
-        return $success ?
-            new GambarResource(true, 'Gambar berhasil dihapus', '') :
-            new GambarResource(false, 'Gagal menghapus gambar', '');
+        try {
+            $this->service->deleteShop($id);
+            return ApiResponse::success('Article deleted successfully')->response();
+        } catch (\Exception $e) {
+            return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
+        }
     }
 }

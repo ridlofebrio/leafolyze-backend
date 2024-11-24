@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\DetectionController;
 use App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ShopController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -57,3 +58,17 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
     Route::post('/update', [ProfileController::class, 'update']);
     Route::post('/password', [ProfileController::class, 'updatePassword']);
 });
+
+Route::group(['prefix' => 'shop', 'middleware' => 'auth:api'], function () {
+    Route::get('/', [ShopController::class, 'index']);
+    Route::get('/{id}', [ShopController::class, 'show']);
+
+    // Admin only routes
+    Route::middleware(['auth:api'])->group(function () {
+        Route::post('/', [ShopController::class, 'store']);
+        Route::put('/{id}', [ShopController::class, 'update']);
+        Route::delete('/{id}', [ShopController::class, 'destroy']);
+    });
+});
+
+
