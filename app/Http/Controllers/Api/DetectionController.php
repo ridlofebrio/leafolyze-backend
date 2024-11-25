@@ -8,6 +8,7 @@ use App\Http\Requests\Detection\UpdateDetectionRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Services\Interfaces\DetectionServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class DetectionController extends Controller
@@ -61,8 +62,15 @@ class DetectionController extends Controller
     public function store(CreateDetectionRequest $request): JsonResponse
     {
         try {
-            $data = $request->validated();
+            Log::info('KONTOL');
+            if (Auth::user()->access !== 'petani') {
+                return ApiResponse::error('Unauthorized. Only petani can create detections.')
+                    ->response()
+                    ->setStatusCode(403);
+            }
             $data['user_id'] = Auth::id();
+
+            Log::info('Detection data', $data);
 
             $detection = $this->detectionService->createDetection($data);
             return ApiResponse::success('Detection saved successfully', $detection)
