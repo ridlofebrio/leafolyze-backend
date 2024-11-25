@@ -14,16 +14,16 @@ class DiseasesSeeder extends Seeder
     {
         $diseases = [
             [
-                'name' => 'Black Spot',
-                'description' => 'A fungal disease that causes dark, circular spots on leaves. The spots may have yellow halos and cause leaves to yellow and drop prematurely.'
-            ],
-            [
                 'name' => 'Bacterial Spot',
                 'description' => 'A bacterial infection causing small, dark brown spots on leaves, stems and fruit. Spots may have yellow halos and cause defoliation.'
             ],
             [
                 'name' => 'Early Blight',
                 'description' => 'A fungal disease causing dark brown spots with concentric rings on older leaves first. Can cause severe defoliation and reduced yields.'
+            ],
+            [
+                'name' => 'Healthy',
+                'description' => 'This plant is healthy and free of any diseases.'
             ],
             [
                 'name' => 'Late Blight',
@@ -34,12 +34,12 @@ class DiseasesSeeder extends Seeder
                 'description' => 'A fungal disease causing pale green to yellow spots on upper leaf surfaces and olive-green to gray fuzzy growth on undersides.'
             ],
             [
-                'name' => 'Septoria Leaf',
-                'description' => 'A fungal disease causing small circular spots with dark borders and light centers. Usually starts on lower leaves and can cause severe defoliation.'
+                'name' => 'Target Spot',
+                'description' => 'A fungal disease causing small, dark brown spots with concentric rings on leaves. Spots may have yellow halos and cause defoliation.'
             ],
             [
-                'name' => 'Yellow Leaf',
-                'description' => 'A viral disease causing leaves to turn yellow, curl, and become brittle. Plants may be stunted and produce fewer fruits.'
+                'name' => 'Black Spot',
+                'description' => 'A fungal disease that causes dark, circular spots on leaves. The spots may have yellow halos and cause leaves to yellow and drop prematurely.'
             ],
         ];
 

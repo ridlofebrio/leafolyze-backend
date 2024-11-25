@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\DetectionController;
+use App\Http\Controllers\Api\DiseaseController;
 use App\Http\Controllers\Api\AuthController;
 use \App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
@@ -43,6 +44,11 @@ Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function ()
     Route::post('/', [DetectionController::class, 'store']);
     Route::put('/{id}', [DetectionController::class, 'update']);
     Route::delete('/{id}', [DetectionController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'diseases'], function () {
+    Route::get('/', [DiseaseController::class, 'index']);
+    Route::get('/{id}', [DiseaseController::class, 'show']);
 });
 
 Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
