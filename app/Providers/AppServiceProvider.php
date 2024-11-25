@@ -11,9 +11,11 @@ use App\Services\Interfaces\DetectionServiceInterface;
 use App\Services\Interfaces\DiseaseServiceInterface;
 use App\Services\Interfaces\ProductServiceInterface;
 use App\Services\Interfaces\ProfileServiceInterface;
+use App\Services\Interfaces\ShopServiceInterface;
 use App\Services\DiseaseService;
 use App\Services\ProductService;
 use App\Services\ProfileService;
+use App\Services\ShopService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DetectionServiceInterface::class, DetectionService::class);
         $this->app->bind(DiseaseServiceInterface::class, DiseaseService::class);
         $this->app->bind(ProfileServiceInterface::class, ProfileService::class);
+        $this->app->bind(ShopServiceInterface::class, ShopService::class);
     }
 
     /**
