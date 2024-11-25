@@ -22,13 +22,9 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () {
     Route::get('/', [ArticleController::class, 'index']);
     Route::get('/{id}', [ArticleController::class, 'show']);
-
-    // Admin only routes
-    Route::middleware(['auth:api'])->group(function () {
-        Route::post('/', [ArticleController::class, 'store']);
-        Route::put('/{id}', [ArticleController::class, 'update']);
-        Route::delete('/{id}', [ArticleController::class, 'destroy']);
-    });
+    Route::post('/', [ArticleController::class, 'store']);
+    Route::put('/{id}', [ArticleController::class, 'update']);
+    Route::delete('/{id}', [ArticleController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'products', 'middleware' => 'auth:api'], function () {
@@ -36,13 +32,9 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth:api'], function () {
     Route::get('/{id}', [ProductController::class, 'show']);
     Route::get('/shop/{shopId}', [ProductController::class, 'byShop']);
     Route::get('/disease/{diseaseId}', [ProductController::class, 'byDisease']);
-
-    // Penjual only routes
-    Route::middleware(['auth:api'])->group(function () {
-        Route::post('/', [ProductController::class, 'store']);
-        Route::put('/{id}', [ProductController::class, 'update']);
-        Route::delete('/{id}', [ProductController::class, 'destroy']);
-    });
+    Route::post('/', [ProductController::class, 'store']);
+    Route::put('/{id}', [ProductController::class, 'update']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function () {
@@ -62,13 +54,9 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
 Route::group(['prefix' => 'shop', 'middleware' => 'auth:api'], function () {
     Route::get('/', [ShopController::class, 'index']);
     Route::get('/{id}', [ShopController::class, 'show']);
-
-    // Admin only routes
-    Route::middleware(['auth:api'])->group(function () {
-        Route::post('/', [ShopController::class, 'store']);
-        Route::put('/{id}', [ShopController::class, 'update']);
-        Route::delete('/{id}', [ShopController::class, 'destroy']);
-    });
+    Route::post('/', [ShopController::class, 'store']);
+    Route::put('/{id}', [ShopController::class, 'update']);
+    Route::delete('/{id}', [ShopController::class, 'destroy']);
 });
 
 

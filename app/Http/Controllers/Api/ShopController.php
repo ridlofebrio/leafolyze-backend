@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\CreateShopRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Models\Shop;
+use App\Services\Interfaces\ShopServiceInterface;
 use App\Services\ShopService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
-    private ShopService $service;
-
-    public function __construct(ShopService $service)
-    {
-        $this->service = $service;
+    public function __construct(
+        protected ShopServiceInterface $service
+    ){
+        $this->middleware('auth:api');
     }
 
     public function index()

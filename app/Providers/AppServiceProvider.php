@@ -10,8 +10,10 @@ use App\Services\Interfaces\AuthServiceInterface;
 use App\Services\Interfaces\DetectionServiceInterface;
 use App\Services\Interfaces\ProductServiceInterface;
 use App\Services\Interfaces\ProfileServiceInterface;
+use App\Services\Interfaces\ShopServiceInterface;
 use App\Services\ProductService;
 use App\Services\ProfileService;
+use App\Services\ShopService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ProductServiceInterface::class, ProductService::class);
         $this->app->bind(DetectionServiceInterface::class, DetectionService::class);
         $this->app->bind(ProfileServiceInterface::class, ProfileService::class);
+        $this->app->bind(ShopServiceInterface::class, ShopService::class);
     }
 
     /**
