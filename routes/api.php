@@ -20,30 +20,39 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'articles'], function () {
     Route::get('/', [ArticleController::class, 'index']);
     Route::get('/{id}', [ArticleController::class, 'show']);
-    Route::post('/', [ArticleController::class, 'store']);
-    Route::post('/{id}', [ArticleController::class, 'update']);
-    Route::delete('/{id}', [ArticleController::class, 'destroy']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/', [ArticleController::class, 'store']);
+        Route::post('/{id}', [ArticleController::class, 'update']);
+        Route::delete('/{id}', [ArticleController::class, 'destroy']);
+    });
 });
 
-Route::group(['prefix' => 'products', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/{id}', [ProductController::class, 'show']);
     Route::get('/shop/{shopId}', [ProductController::class, 'byShop']);
     Route::get('/disease/{diseaseId}', [ProductController::class, 'byDisease']);
-    Route::post('/', [ProductController::class, 'store']);
-    Route::post('/{id}', [ProductController::class, 'update']);
-    Route::delete('/{id}', [ProductController::class, 'destroy']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/', [ProductController::class, 'store']);
+        Route::post('/{id}', [ProductController::class, 'update']);
+        Route::delete('/{id}', [ProductController::class, 'destroy']);
+    });
 });
 
-Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'detections'], function () {
     Route::get('/', [DetectionController::class, 'index']);
     Route::get('/{id}', [DetectionController::class, 'show']);
-    Route::post('/', [DetectionController::class, 'store']);
-    Route::post('/{id}', [DetectionController::class, 'update']);
-    Route::delete('/{id}', [DetectionController::class, 'destroy']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/', [DetectionController::class, 'store']);
+        Route::post('/{id}', [DetectionController::class, 'update']);
+        Route::delete('/{id}', [DetectionController::class, 'destroy']);
+    });
 });
 
 Route::group(['prefix' => 'diseases'], function () {
@@ -57,13 +66,13 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth:api'], function () {
     Route::post('/password', [ProfileController::class, 'updatePassword']);
 });
 
-Route::group(['prefix' => 'shop', 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'shop'], function () {
     Route::get('/', [ShopController::class, 'index']);
     Route::get('/{id}', [ShopController::class, 'show']);
-    Route::post('/', [ShopController::class, 'store']);
-    Route::post('/{id}', [ShopController::class, 'update']);
-    Route::delete('/{id}', [ShopController::class, 'destroy']);
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('/', [ShopController::class, 'store']);
+        Route::post('/{id}', [ShopController::class, 'update']);
+        Route::delete('/{id}', [ShopController::class, 'destroy']);
+    });
 });
-
-
-
