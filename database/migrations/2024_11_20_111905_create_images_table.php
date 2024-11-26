@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('path');
+            $table->string('url');
             $table->string('public_id');
             $table->enum('type', ['article', 'user_detail', 'tomato_leaf_detection', 'shop', 'product']);
             $table->unsignedBigInteger('article_id')->nullable();
