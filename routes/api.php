@@ -24,7 +24,7 @@ Route::group(['prefix' => 'articles', 'middleware' => 'auth:api'], function () {
     Route::get('/', [ArticleController::class, 'index']);
     Route::get('/{id}', [ArticleController::class, 'show']);
     Route::post('/', [ArticleController::class, 'store']);
-    Route::put('/{id}', [ArticleController::class, 'update']);
+    Route::post('/{id}', [ArticleController::class, 'update']);
     Route::delete('/{id}', [ArticleController::class, 'destroy']);
 });
 
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'products', 'middleware' => 'auth:api'], function () {
     Route::get('/shop/{shopId}', [ProductController::class, 'byShop']);
     Route::get('/disease/{diseaseId}', [ProductController::class, 'byDisease']);
     Route::post('/', [ProductController::class, 'store']);
-    Route::put('/{id}', [ProductController::class, 'update']);
+    Route::post('/{id}', [ProductController::class, 'update']);
     Route::delete('/{id}', [ProductController::class, 'destroy']);
 });
 
@@ -42,7 +42,7 @@ Route::group(['prefix' => 'detections', 'middleware' => 'auth:api'], function ()
     Route::get('/', [DetectionController::class, 'index']);
     Route::get('/{id}', [DetectionController::class, 'show']);
     Route::post('/', [DetectionController::class, 'store']);
-    Route::put('/{id}', [DetectionController::class, 'update']);
+    Route::post('/{id}', [DetectionController::class, 'update']);
     Route::delete('/{id}', [DetectionController::class, 'destroy']);
 });
 
@@ -61,7 +61,7 @@ Route::group(['prefix' => 'shop', 'middleware' => 'auth:api'], function () {
     Route::get('/', [ShopController::class, 'index']);
     Route::get('/{id}', [ShopController::class, 'show']);
     Route::post('/', [ShopController::class, 'store']);
-    Route::put('/{id}', [ShopController::class, 'update']);
+    Route::post('/{id}', [ShopController::class, 'update']);
     Route::delete('/{id}', [ShopController::class, 'destroy']);
 });
 
