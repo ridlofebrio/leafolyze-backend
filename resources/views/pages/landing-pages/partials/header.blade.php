@@ -5,7 +5,7 @@
                 <!-- Logo Section -->
                 <div class="flex-shrink-0">
                     <a href="/" class="flex items-center">
-                        <x-application-logo class="h-10 fill-current text-gray-800" />
+                        <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="h-8 w-auto">
                     </a>
                 </div>
 
@@ -13,13 +13,13 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-center space-x-4">
                         <a href="#home"
-                            class="active nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#417777]">Home</a>
+                            class="active nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#B4DB46]">Home</a>
                         <a href="#about"
-                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#417777]">About</a>
+                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#B4DB46]">About</a>
                         <a href="#features"
-                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#417777]">Features</a>
+                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#B4DB46]">Features</a>
                         <a href="#faq"
-                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#417777]">FAQ</a>
+                            class="nav-link rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#B4DB46]">FAQ</a>
                     </div>
                 </div>
 
@@ -27,9 +27,9 @@
                 <div class="hidden md:block">
                     <div class="flex items-center space-x-4">
                         <a href="/login"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-gray-600">Login</a>
+                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#c1e165]">Login</a>
                         <a href="/register"
-                            class="rounded-md bg-[#417777] px-4 py-2 text-sm font-medium text-white hover:bg-[#345f5f]">Register</a>
+                            class="rounded-md bg-[#B4DB46] px-4 py-2 text-sm font-medium text-white hover:bg-[#96b73a]">Register</a>
                     </div>
                 </div>
 

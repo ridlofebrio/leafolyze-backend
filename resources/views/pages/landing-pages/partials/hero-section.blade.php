@@ -4,7 +4,7 @@
         <div class="md:w-1/2 md:pr-10">
             <h1 class="mb-6 text-4xl font-bold leading-tight text-gray-900 md:text-5xl">
                 Temukan Penyakit Daun Tomat.
-                <span class="text-[#417777]"> Cepat. Tepat. Praktis</span>
+                <span class="text-[#B4DB46]"> Cepat. Tepat. Praktis</span>
             </h1>
 
             <p class="mb-8 text-lg text-gray-600 md:text-xl">
@@ -14,7 +14,7 @@
 
             <div class="flex items-center space-x-4">
                 <a href="/register"
-                    class="inline-flex items-center rounded-md border border-transparent bg-[#417777] px-6 py-3 text-base font-medium text-white transition duration-300 hover:bg-[#345f5f]">
+                    class="inline-flex items-center rounded-md border border-transparent bg-[#B4DB46] px-6 py-3 text-base font-medium text-white transition duration-300 hover:bg-[#96b73a]">
                     Download Now
                     <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"

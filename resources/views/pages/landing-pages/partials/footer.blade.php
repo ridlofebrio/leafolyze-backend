@@ -4,8 +4,8 @@
             <!-- Logo Section -->
             <div class="mb-4 md:mb-0">
                 <a href="#" class="text-2xl font-bold">
-                    <x-application-logo class="inline-block h-10 fill-current text-white" />
-                    Nama Apl
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="inline h-10">
+                    Leafolyze
                 </a>
             </div>
 
