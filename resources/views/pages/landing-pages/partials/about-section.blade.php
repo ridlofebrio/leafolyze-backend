@@ -17,8 +17,8 @@
         <div class="md:w-1/2">
             <!-- Section Label -->
             <div class="mb-6 flex items-center gap-2">
-                <span class="h-1 w-12 bg-[#417777]"></span>
-                <p class="font-semibold text-[#417777]">About Us</p>
+                <span class="h-1 w-12 bg-[#B4DB46]"></span>
+                <p class="font-semibold text-[#B4DB46]">About Us</p>
             </div>
 
             <!-- Main Heading -->
