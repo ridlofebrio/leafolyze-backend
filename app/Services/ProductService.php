@@ -76,14 +76,13 @@ class ProductService implements ProductServiceInterface
                     'shop_id' => $data['shop_id'],
                 ]);
 
-                // Create image record
-                $product->images()->create([
+                $product->image()->create([
                     'path' => $uploadResult['path'],
                     'public_id' => $uploadResult['public_id'],
                     'type' => 'product'
                 ]);
 
-                return $product->load(['shop.user.userDetail', 'images']);
+                return $product->load(['shop.user.userDetail', 'image']);
             }
 
             throw new \Exception('Product image is required');
@@ -108,14 +107,14 @@ class ProductService implements ProductServiceInterface
                 $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'products');
 
                 // Delete old image if exists
-                if ($product->images()->exists()) {
-                    $oldImage = $product->images()->first();
+                if ($product->image()->exists()) {
+                    $oldImage = $product->image()->first();
                     $this->cloudinaryService->deleteFile($oldImage->public_id);
                     $oldImage->delete();
                 }
 
                 // Create new image record
-                $product->images()->create([
+                $product->image()->create([
                     'path' => $uploadResult['path'],
                     'public_id' => $uploadResult['public_id'],
                     'type' => 'product'
@@ -130,7 +129,7 @@ class ProductService implements ProductServiceInterface
                 'stock' => $data['stock'] ?? $product->stock,
             ]);
 
-            return $product->fresh(['shop.user.userDetail', 'images']);
+            return $product->fresh(['shop.user.userDetail', 'image']);
         } catch (\Exception $e) {
             Log::error("Error updating product ID {$id}: " . $e->getMessage());
             throw $e;
