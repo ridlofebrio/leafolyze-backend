@@ -16,7 +16,8 @@ class UpdateDetectionRequest extends FormRequest
         return [
             'title' => 'sometimes|string|max:255',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'disease_ids' => 'sometimes|array|required_with:image',
+            //TODO: Add array for disease_ids
+            'disease_ids' => 'sometimes',
             'disease_ids.*' => 'exists:diseases,id'
         ];
     }

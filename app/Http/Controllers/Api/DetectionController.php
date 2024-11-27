@@ -74,12 +74,6 @@ class DetectionController extends Controller
     public function update(UpdateDetectionRequest $request, int $id): JsonResponse
     {
         try {
-            if (Auth::user()->access !== 'petani') {
-                return ApiResponse::error('Unauthorized. Only petani can update detections.')
-                    ->response()
-                    ->setStatusCode(403);
-            }
-
             $detection = $this->detectionService->getDetectionById($id);
 
             // Check if detection belongs to user
