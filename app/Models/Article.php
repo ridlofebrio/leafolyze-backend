@@ -16,11 +16,22 @@ class Article extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'user_id',
         'title',
         'content',
         'duration',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Set user_id automatically when creating an article
+        static::creating(function ($article) {
+            if (!$article->user_id) {
+                $article->user_id = auth()->id();
+            }
+        });
+    }
 
     /**
      * Relation to Image.

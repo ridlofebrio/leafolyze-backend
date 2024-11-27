@@ -23,12 +23,16 @@ class UserDetail extends Model
         'address',
     ];
 
+    protected $casts = [
+        'birth' => 'date',
+    ];
+
     /**
      * Relation to User.
      */
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'id', 'user_id');
     }
 
     /**

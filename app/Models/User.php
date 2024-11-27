@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable implements JWTSubject, FilamentUser
 {
     use HasApiTokens, Notifiable, HasFactory;
 
@@ -71,4 +73,37 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(TomatoLeafDetection::class);
     }
+
+    // Add this method to get the name from UserDetail
+    public function getName(): string
+    {
+        return $this->userDetail?->name ?? $this->email;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->userDetail?->name ?? $this->email;
+    }
+
+    // Add this method for Filament
+    public function getFilamentName(): string
+    {
+        return $this->userDetail?->name ?? $this->email;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+       return in_array($this->access, ['admin', 'penjual']);
+    }
+
+    public function getAuthIdentifierName()
+    {
+        return 'id';
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
 }
