@@ -47,11 +47,11 @@ Route::group(['prefix' => 'products'], function () {
 Route::group(['prefix' => 'detections'], function () {
     Route::get('/', [DetectionController::class, 'index']);
     Route::get('/{id}', [DetectionController::class, 'show']);
-
+    Route::post('/', [DetectionController::class, 'store']);
+    Route::post('/{id}', [DetectionController::class, 'update']);
+    Route::delete('/{id}', [DetectionController::class, 'destroy']);
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('/', [DetectionController::class, 'store']);
-        Route::post('/{id}', [DetectionController::class, 'update']);
-        Route::delete('/{id}', [DetectionController::class, 'destroy']);
+
     });
 });
 

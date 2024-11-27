@@ -20,6 +20,7 @@ class CreateProductRequest extends FormRequest
             'stock' => 'required|integer|min:0',
             'shop_id' => 'required|exists:shops,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'disease_id' => 'required',
         ];
     }
 }

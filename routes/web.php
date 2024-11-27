@@ -22,6 +22,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         return view('pages.dashboard.index');
     })->name('dashboard');
+
+//    Route::get()/
 });
 
 // Route::get('/debug-auth', function () {

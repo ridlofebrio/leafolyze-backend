@@ -7,7 +7,7 @@
     "require": {
         "php": "^8.2",
         "cloudinary-labs/cloudinary-laravel": "^2.2",
-        "filament/filament": "^3.2",
+        "filament/filament": "3.2.57",
         "laravel/breeze": "^2.2",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
