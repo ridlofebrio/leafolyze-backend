@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Shop;
 
 use App\Trait\ImageTrait;
 use Illuminate\Foundation\Http\FormRequest;

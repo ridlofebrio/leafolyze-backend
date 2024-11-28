@@ -40,6 +40,7 @@ class DetectionService implements DetectionServiceInterface
 
     public function createDetection(array $data)
     {
+        log::info('Servise', $data);
         try {
             DB::beginTransaction();
 

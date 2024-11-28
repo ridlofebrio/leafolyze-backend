@@ -21,17 +21,17 @@ class Article extends Model
         'duration',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        // Set user_id automatically when creating an article
-        static::creating(function ($article) {
-            if (!$article->user_id) {
-                $article->user_id = auth()->id();
-            }
-        });
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        // Set user_id automatically when creating an article
+//        static::creating(function ($article) {
+//            if (!$article->user_id) {
+//                $article->user_id = auth()->id();
+//            }
+//        });
+//    }
 
     /**
      * Relation to Image.

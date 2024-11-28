@@ -8,7 +8,7 @@ class CreateDetectionRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth()->user()->access === 'petani';
+        return true;
     }
 
     public function rules(): array
@@ -16,6 +16,7 @@ class CreateDetectionRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            //TODO : add array of disease_ids
             'disease_ids' => 'required|array',
             'disease_ids.*' => 'exists:diseases,id'
         ];

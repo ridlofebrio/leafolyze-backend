@@ -74,6 +74,7 @@ class ProductService implements ProductServiceInterface
                     'price' => $data['price'],
                     'stock' => $data['stock'],
                     'shop_id' => $data['shop_id'],
+                    'disease_id' => $data['disease_id'],
                 ]);
 
                 $product->image()->create([
@@ -82,7 +83,7 @@ class ProductService implements ProductServiceInterface
                     'type' => 'product'
                 ]);
 
-                return $product->load(['shop.user.userDetail', 'image']);
+                return $product->load(['image']);
             }
 
             throw new \Exception('Product image is required');
