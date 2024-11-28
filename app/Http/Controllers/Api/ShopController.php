@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\CreateShopRequest;
+use App\Http\Requests\Shop\CreateShopRequest;
+use App\Http\Requests\Shop\UpdateShopRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Models\Shop;
 use App\Services\Interfaces\ShopServiceInterface;
@@ -51,7 +52,7 @@ class ShopController extends Controller
         }
     }
 
-    public function update(CreateShopRequest $request, $id): JsonResponse
+    public function update(UpdateShopRequest $request, $id): JsonResponse
     {
         try {
             $shop = $this->service->updateShop($id, $request->validated());
