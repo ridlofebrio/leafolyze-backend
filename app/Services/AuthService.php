@@ -24,22 +24,28 @@ class AuthService implements AuthServiceInterface
         }
     }
 
-    public function register(array $data)
+    public function register(array $data, $access = 'petani')
     {
         try {
             $user = User::create([
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'access' => $data['access'] ?? 'petani',
+                'access' => $access,
             ]);
 
             // Create user details
             $user->userDetail()->create([
                 'name' => $data['name'],
-                'birth' => $data['birth'],
-                'gender' => $data['gender'],
-                'address' => $data['address'],
             ]);
+
+            if ($access === 'penjual') {
+                $user->shop()->create([
+                    'name' => $data['shop_name'],
+                    'address' => $data['shop_address'],
+                    'description' => $data['shop_description'],
+                    'operational' => $data['shop_operational'],
+                ]);
+            }
 
             Auth::login($user);
             $token = Auth::tokenById($user->id);

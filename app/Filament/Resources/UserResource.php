@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -18,7 +19,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function getEloquentQuery(): Builder
     {
@@ -33,15 +34,75 @@ class UserResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('userDetail.name')
                             ->required()
-                            ->label('Name'),
+                            ->label('Name')
+                            ->afterStateHydrated(function (TextInput $component, $state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $component->state($record->userDetail->name);
+                                }
+                            })
+                            ->dehydrated(true)
+                            ->live()
+                            ->afterStateUpdated(function ($state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $record->userDetail->update(['name' => $state]);
+                                }
+                            }),
+                        Forms\Components\DatePicker::make('userDetail.birth')
+                            ->label('Birth Date')
+                            ->afterStateHydrated(function ($component, $state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $component->state($record->userDetail->birth);
+                                }
+                            })
+                            ->dehydrated(true)
+                            ->live()
+                            ->afterStateUpdated(function ($state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $record->userDetail->update(['birth' => $state]);
+                                }
+                            }),
+                        Forms\Components\Select::make('userDetail.gender')
+                            ->label('Gender')
+                            ->options([
+                                'male' => 'Male',
+                                'female' => 'Female',
+                            ])
+                            ->afterStateHydrated(function ($component, $state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $component->state($record->userDetail->gender);
+                                }
+                            })
+                            ->dehydrated(true)
+                            ->live()
+                            ->afterStateUpdated(function ($state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $record->userDetail->update(['gender' => $state]);
+                                }
+                            }),
+                        Forms\Components\Textarea::make('userDetail.address')
+                            ->label('Address')
+                            ->afterStateHydrated(function ($component, $state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $component->state($record->userDetail->address);
+                                }
+                            })
+                            ->dehydrated(true)
+                            ->live()
+                            ->columnSpanFull()
+                            ->afterStateUpdated(function ($state, $record) {
+                                if ($record && $record->userDetail) {
+                                    $record->userDetail->update(['address' => $state]);
+                                }
+                            }),
+                        // Original user fields
                         Forms\Components\TextInput::make('email')
                             ->required()
                             ->email()
                             ->unique(ignoreRecord: true),
                         Forms\Components\TextInput::make('password')
                             ->password()
-                            ->dehydrateStateUsing(fn ($state) => Hash::make($state))
-                            ->required(fn (string $operation): bool => $operation === 'create'),
+                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->required(fn(string $operation): bool => $operation === 'create'),
                         Forms\Components\Select::make('access')
                             ->options([
                                 'admin' => 'Admin',

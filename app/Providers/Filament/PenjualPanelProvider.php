@@ -5,8 +5,11 @@ namespace App\Providers\Filament;
 use App\Filament\Resources\ShopResource;
 use App\Filament\Resources\ProductResource;
 use Filament\Http\Middleware\Authenticate;
+use App\Filament\Pages\Penjual\PersonalShop;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Widgets;
 use Filament\Support\Colors\Color;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -28,9 +31,16 @@ class PenjualPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#B4DB46'),
             ])
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->widgets([
+                Widgets\AccountWidget::class,
+            ])
             ->resources([
-                ShopResource::class,
                 ProductResource::class,
+            ])
+            ->pages([
+                'index' => Dashboard::class,
+                'my-shop' => PersonalShop::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -40,7 +50,7 @@ class PenjualPanelProvider extends PanelProvider
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,
                 SubstituteBindings::class,
-                EnsureUserRole::class.':penjual',
+                EnsureUserRole::class . ':penjual',
             ])
             ->authMiddleware([
                 Authenticate::class,

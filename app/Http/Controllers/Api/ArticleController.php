@@ -65,7 +65,7 @@ class ArticleController extends Controller
     public function destroy(int $id): JsonResponse
     {
         try {
-            if (auth()->user()->access !== 'admin') {
+            if (auth('api')->user()->access !== 'admin') {
                 return ApiResponse::error('Unauthorized. Only admin can delete articles.')
                     ->response()
                     ->setStatusCode(403);
