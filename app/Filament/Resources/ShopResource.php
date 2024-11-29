@@ -17,15 +17,12 @@ class ShopResource extends Resource
 {
     protected static ?string $model = Shop::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('user_id')
-                    ->required()
-                    ->numeric(),
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -45,14 +42,16 @@ class ShopResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.userDetail.name')
+                    ->label('Owner')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('address')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('description')
+                    ->wrap(true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('operational')
                     ->searchable(),
@@ -70,6 +69,7 @@ class ShopResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -77,18 +77,6 @@ class ShopResource extends Resource
                 ]),
             ]);
     }
-
-    public static function getEloquentQuery(): Builder
-{
-    $query = parent::getEloquentQuery();
-    return $query->where('user_id', auth()->id());
-}
-
-public static function canCreate(): bool
-{
-    // Only allow creation if the penjual doesn't have a shop yet
-    return !auth()->user()->shop()->exists();
-}
 
     public static function getRelations(): array
     {

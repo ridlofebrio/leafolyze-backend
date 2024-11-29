@@ -52,9 +52,6 @@ class ArticleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image.url')
-                    ->label('Image')
-                    ->circular(),
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
                     ->sortable(),

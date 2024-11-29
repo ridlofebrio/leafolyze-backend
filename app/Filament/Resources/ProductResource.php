@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Models\Disease;
+use App\Models\Shop;
 
 class ProductResource extends Resource
 {
@@ -26,19 +28,33 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('shop_id')
+                Forms\Components\Select::make('shop_id')
+                    ->label('Shop')
                     ->required()
-                    ->numeric(),
+                    ->options(Shop::all()->pluck('name', 'id'))
+                    ->relationship('shop', 'name')
+                    ->native(false)
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
-                Forms\Components\TextInput::make('disease_id')
+                    ->prefix('IDR'),
+                Forms\Components\Select::make('disease_id')
+                    ->label('Disease')
                     ->required()
-                    ->numeric(),
+                    ->options(Disease::all()->pluck('name', 'id'))
+                    ->relationship('disease', 'name')
+                    ->native(false)
+                    ->preload(),
+                Forms\Components\FileUpload::make('image')
+                    ->image()
+                    ->directory('products')
+                    ->columnSpanFull()
+                    ->label('Product Image'),
             ]);
     }
 
@@ -48,15 +64,17 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('shop_id')
+                Tables\Columns\TextColumn::make('shop.name')
+                    ->label('Shop')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->money('IDR')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('disease_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('disease.name')
+                    ->label('Disease')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -71,12 +89,23 @@ class ProductResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if (auth('web')->user()->role == 'penjual') {
+            return parent::getEloquentQuery()->whereHas('shop', function ($query) {
+                $query->where('user_id', auth('web')->id());
+            });
+        }
+        return parent::getEloquentQuery();
     }
 
     public static function getRelations(): array

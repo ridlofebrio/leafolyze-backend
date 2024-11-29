@@ -5,16 +5,41 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\Services\Interfaces\AuthServiceInterface;
+use App\Http\Resources\Api\ApiResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use App\Models\UserDetail;
+use App\Models\Shop;
 
 class AuthController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthServiceInterface $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function login()
     {
         if (Auth::check()) {
             return $this->redirectBasedOnRole(Auth::user());
         }
         return view('auth.login');
+    }
+
+    public function register()
+    {
+        return view('auth.register');
+    }
+
+    public function registerPenjual(Request $request)
+    {
+        $result = $this->authService->register($request->validated(), 'penjual');
+        return ApiResponse::success('Register successful', $result)->response();
     }
 
     public function handleLogin(LoginRequest $request)
