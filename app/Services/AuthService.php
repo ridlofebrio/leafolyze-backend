@@ -13,7 +13,7 @@ class AuthService implements AuthServiceInterface
     public function login(array $credentials)
     {
         try {
-            if (!$token = Auth::attempt($credentials)) {
+            if (!$token = Auth::guard('api')->attempt($credentials)) {
                 throw new \Exception('Invalid credentials');
             }
 

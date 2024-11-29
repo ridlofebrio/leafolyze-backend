@@ -17,7 +17,8 @@ class DetectionController extends Controller
     public function __construct(
         protected DetectionServiceInterface $detectionService
     ) {
-//        $this->middleware('auth:api');
+        Auth::shouldUse('api');
+        //        $this->middleware('auth:api');
     }
 
     public function index(): JsonResponse

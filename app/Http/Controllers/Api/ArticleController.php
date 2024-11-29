@@ -8,6 +8,7 @@ use App\Http\Requests\Article\UpdateArticleRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Services\Interfaces\ArticleServiceInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ArticleController extends Controller
@@ -15,6 +16,7 @@ class ArticleController extends Controller
     public function __construct(
         protected ArticleServiceInterface $articleService
     ) {
+        Auth::shouldUse('api');
         $this->middleware('auth:api');
     }
 

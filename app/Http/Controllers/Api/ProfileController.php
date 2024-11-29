@@ -15,13 +15,14 @@ class ProfileController extends Controller
     public function __construct(
         protected ProfileServiceInterface $profileService
     ) {
+        Auth::shouldUse('api');
         $this->middleware('auth:api');
     }
 
     public function show(): JsonResponse
     {
         try {
-            $profile = $this->profileService->getProfile(Auth::id());
+            $profile = $this->profileService->getProfile(Auth::guard('api')->id());
             return ApiResponse::success('Profile retrieved successfully', $profile)->response();
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage())->response()->setStatusCode(404);
@@ -31,7 +32,7 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request): JsonResponse
     {
         try {
-            $profile = $this->profileService->updateProfile(Auth::id(), $request->validated());
+            $profile = $this->profileService->updateProfile(Auth::guard('api')->id(), $request->validated());
             return ApiResponse::success('Profile updated successfully', $profile)->response();
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);
@@ -41,7 +42,7 @@ class ProfileController extends Controller
     public function updatePassword(UpdatePasswordRequest $request): JsonResponse
     {
         try {
-            $this->profileService->updatePassword(Auth::id(), $request->validated());
+            $this->profileService->updatePassword(Auth::guard('api')->id(), $request->validated());
             return ApiResponse::success('Password updated successfully')->response();
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage())->response()->setStatusCode(400);

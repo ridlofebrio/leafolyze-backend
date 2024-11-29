@@ -18,39 +18,39 @@ class AuthController extends Controller
     }
 
     public function handleLogin(LoginRequest $request)
-{
-    $credentials = $request->only('email', 'password');
+    {
+        $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        $request->session()->regenerate();
-        session()->put('auth.password_confirmed_at', time());
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+            session()->put('auth.password_confirmed_at', time());
 
-        return match(Auth::user()->access) {
-            'admin' => redirect('/admin'),
-            'penjual' => redirect('/penjual'),
-//            default => redirect('/dashboard'),
-        };
+            return match (Auth::guard('web')->user()->access) {
+                'admin' => redirect('/admin'),
+                'penjual' => redirect('/penjual'),
+                default => redirect('/dashboard'),
+            };
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
-}
-
-     private function redirectBasedOnRole($user)
+    private function redirectBasedOnRole($user)
     {
         if (!$user) {
             return redirect()->route('login');
         }
 
-        return match($user->access) {
+        return match ($user->access) {
             'admin' => redirect()->intended('/admin'),
             'penjual' => redirect()->intended('/penjual'),
             default => redirect()->intended('/dashboard'),
         };
     }
 
-   public function logout()
+    public function logout()
     {
         Auth::logout();
         session()->invalidate();
