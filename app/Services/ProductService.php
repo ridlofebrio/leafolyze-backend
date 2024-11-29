@@ -99,7 +99,7 @@ class ProductService implements ProductServiceInterface
             $product = Product::findOrFail($id);
 
             // Check if user owns the shop
-            if ($product->shop->user_id !== Auth::id()) {
+            if ($product->shop->user_id !== Auth::guard('api')->id()) {
                 throw new \Exception('Unauthorized. You can only update your own products.');
             }
 
@@ -143,7 +143,7 @@ class ProductService implements ProductServiceInterface
             $product = Product::with('images')->findOrFail($id);
 
             // Check if user owns the shop
-            if ($product->shop->user_id !== Auth::id()) {
+            if ($product->shop->user_id !== Auth::guard('api')->id()) {
                 throw new \Exception('Unauthorized. You can only delete your own products.');
             }
 

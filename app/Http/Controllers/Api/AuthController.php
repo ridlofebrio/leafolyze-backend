@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\Api\ApiResponse;
 use App\Services\Interfaces\AuthServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
@@ -16,6 +17,7 @@ class AuthController extends Controller
     public function __construct(AuthServiceInterface $authService)
     {
         $this->authService = $authService;
+        Auth::shouldUse('api');
         $this->middleware('auth:api')->except(['login', 'register']);
     }
 

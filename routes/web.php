@@ -18,24 +18,8 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'handleLogin'])->name('login.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
     Route::get('/dashboard', function () {
         return view('pages.dashboard.index');
     })->name('dashboard');
-
-//    Route::get()/
 });
-
-// Route::get('/debug-auth', function () {
-//     $user = \App\Models\User::where('email', 'admin@example.com')->first();
-//     $testPassword = 'password123';
-
-//     dd([
-//         'user_exists' => $user !== null,
-//         'password_check' => Hash::check($testPassword, $user->password),
-//         'current_auth' => Auth::check(),
-//         'session_data' => session()->all(),
-//         'session_id' => session()->getId(),
-//         'cookies' => request()->cookies->all(),
-//     ]);
-// });
