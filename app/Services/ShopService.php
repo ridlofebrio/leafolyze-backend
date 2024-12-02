@@ -32,7 +32,7 @@ class ShopService implements ShopServiceInterface
             $shop = Shop::with('image')->findOrFail($shopId);
 
             // Update shop details
-            $shopData = array_intersect_key($data, array_flip(['name', 'address', 'description', 'operational']));
+            $shopData = array_intersect_key($data, array_flip(['name', 'address', 'description', 'operational', 'noHp']));
             if (!empty($shopData)) {
                 $shop->update($shopData);
             }
@@ -69,7 +69,7 @@ class ShopService implements ShopServiceInterface
         try {
             DB::beginTransaction();
 
-            $shopData = array_intersect_key($data, array_flip(['user_id', 'name', 'address', 'description', 'operational']));
+            $shopData = array_intersect_key($data, array_flip(['user_id', 'name', 'address', 'description', 'operational', 'noHp']));
             $shop = Shop::create($shopData);
 
             // Handle shop image upload

@@ -18,6 +18,7 @@ class ShopsSeeder extends Seeder
             'address' => 'Jl. Sehat No. 10, Jakarta',
             'description' => 'Shop yang menyediakan berbagai jenis tanaman sehat dan berkualitas.',
             'operational' => '09:00 - 18:00',
+            'noHp' => '081234567890',
         ]);
 
         Shop::create([
@@ -26,6 +27,7 @@ class ShopsSeeder extends Seeder
             'address' => 'Jl. Organik No. 5, Bandung',
             'description' => 'Menjual produk-produk organik, termasuk sayuran dan buah-buahan segar.',
             'operational' => '08:00 - 17:00',
+            'noHp' => '081234567891',
         ]);
 
         Shop::create([
@@ -34,6 +36,7 @@ class ShopsSeeder extends Seeder
             'address' => 'Jl. Pertanian No. 15, Yogyakarta',
             'description' => 'Shop alat pertanian dan perlengkapan berkebun.',
             'operational' => '07:00 - 16:00',
+            'noHp' => '081234567892',
         ]);
     }
 }
