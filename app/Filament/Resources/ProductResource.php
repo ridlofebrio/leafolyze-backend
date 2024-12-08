@@ -26,95 +26,138 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make()
+                Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255)
-                            ->lazy(),
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->lazy()
+                                    ->autocomplete(false)
+                                    ->placeholder('Product name'),
 
-                        Forms\Components\TextInput::make('price')
-                            ->required()
-                            ->numeric()
-                            ->prefix('IDR')
-                            ->lazy(),
+                                Forms\Components\TextInput::make('price')
+                                    ->required()
+                                    ->numeric()
+                                    ->prefix('IDR')
+                                    ->lazy(),
 
-                        Forms\Components\Select::make('disease_id')
-                            ->label('Disease')
-                            ->required()
-                            ->relationship('disease', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->native(false)
-                            ->optionsLimit(20),
+                                Forms\Components\Select::make('disease_id')
+                                    ->label('Disease')
+                                    ->required()
+                                    ->relationship('disease', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->native(false)
+                                    ->optionsLimit(20)
+                                    ->placeholder('Select disease')
+                            ])
+                            ->columns(2),
+
+                        Forms\Components\Section::make()
+                            ->schema([
+                                Forms\Components\Textarea::make('description')
+                                    ->required()
+                                    ->lazy()
+                                    ->rows(4)
+                                    ->placeholder('Product description'),
+
+                                Forms\Components\FileUpload::make('image')
+                                    ->image()
+                                    ->directory('products')
+                                    ->maxSize(1024)
+                                    ->label('Product Image')
+                                    ->imageResizeMode('cover')
+                                    ->imageCropAspectRatio('1:1')
+                                    ->imageResizeTargetWidth('512')
+                                    ->imageResizeTargetHeight('512'),
+                            ])
+                            ->columns(1),
                     ])
-                    ->columns(2),
-
-                Forms\Components\Section::make()
-                    ->schema([
-                        Forms\Components\Textarea::make('description')
-                            ->required()
-                            ->lazy(),
-
-                        Forms\Components\FileUpload::make('image')
-                            ->image()
-                            ->directory('products')
-                            ->maxSize(1024)
-                            ->label('Product Image'),
-                    ])
-                    ->columns(1),
-            ]);
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->defaultPaginationPageOption(25)
-            ->defaultSort('id', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->poll('0')
             ->deferLoading()
+            ->persistSortInSession()
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->square()
+                    ->label('Image'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->wrap(),
                 Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('disease.name')
                     ->label('Disease')
-                    ->searchable(),
+                    ->searchable()
+                    ->tooltip(fn(Product $record): string => $record->description),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('disease')
+                    ->relationship('disease', 'name')
+                    ->preload()
+                    ->multiple(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->modalWidth('lg'),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
+            ])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
             ]);
     }
-
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery()
-            ->select(['id', 'name', 'price', 'description', 'shop_id', 'disease_id'])
-            ->with(['shop:id,name', 'disease:id,name']);
+            ->select([
+                'id',
+                'name',
+                'price',
+                'description',
+                'shop_id',
+                'disease_id',
+                'created_at',
+            ])
+            ->with([
+                'shop' => fn($q) => $q->select('id', 'name', 'user_id'),
+                'disease' => fn($q) => $q->select('id', 'name'),
+                'image' => fn($q) => $q->select('id', 'product_id', 'path')
+            ]);
 
         if (auth('web')->user()->role === 'penjual') {
-            $query->whereHas('shop', fn($q) => $q->where('user_id', auth('web')->id()));
+            $query->whereHas('shop', function ($q) {
+                $q->where('user_id', auth('web')->id());
+            });
         }
 
-        $cacheKey = 'products_resource_data_' . auth('web')->id();
+        $cacheKey = 'products_resource_' . auth('web')->id() . '_' . auth('web')->user()->role;
 
         $productIds = Cache::remember($cacheKey, 3600, function () use ($query) {
             return $query->pluck('id');
         });
 
-        return $query->whereIn('id', $productIds);
+        return static::$model::query()
+            ->whereIn('id', $productIds)
+            ->latest();
     }
 
     public static function getRelations(): array

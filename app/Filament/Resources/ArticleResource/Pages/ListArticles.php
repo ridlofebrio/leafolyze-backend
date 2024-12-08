@@ -13,7 +13,13 @@ class ListArticles extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->modalWidth('lg'),
         ];
+    }
+
+    protected function getTableRecordsPerPageSelectOptions(): array
+    {
+        return [25, 50, 100];
     }
 }
