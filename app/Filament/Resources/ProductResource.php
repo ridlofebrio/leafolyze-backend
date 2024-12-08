@@ -26,36 +26,43 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Select::make('shop_id')
-                    ->label('Shop')
-                    ->required()
-                    ->options(Shop::all()->pluck('name', 'id'))
-                    ->relationship('shop', 'name')
-                    ->native(false)
-                    ->searchable()
-                    ->preload(),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('IDR'),
-                Forms\Components\Select::make('disease_id')
-                    ->label('Disease')
-                    ->required()
-                    ->options(Disease::all()->pluck('name', 'id'))
-                    ->relationship('disease', 'name')
-                    ->native(false)
-                    ->preload(),
-                Forms\Components\FileUpload::make('image')
-                    ->image()
-                    ->directory('products')
-                    ->columnSpanFull()
-                    ->label('Product Image'),
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->lazy(),
+
+                        Forms\Components\TextInput::make('price')
+                            ->required()
+                            ->numeric()
+                            ->prefix('IDR')
+                            ->lazy(),
+
+                        Forms\Components\Select::make('disease_id')
+                            ->label('Disease')
+                            ->required()
+                            ->relationship('disease', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
+                            ->optionsLimit(20),
+                    ])
+                    ->columns(2),
+
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\Textarea::make('description')
+                            ->required()
+                            ->lazy(),
+
+                        Forms\Components\FileUpload::make('image')
+                            ->image()
+                            ->directory('products')
+                            ->maxSize(1024)
+                            ->label('Product Image'),
+                    ])
+                    ->columns(1),
             ]);
     }
 
@@ -65,53 +72,40 @@ class ProductResource extends Resource
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', 'desc')
             ->poll('0')
+            ->deferLoading()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('shop.name')
-                    ->label('Shop')
-                    ->numeric()
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('disease.name')
                     ->label('Disease')
-                    ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->modalWidth('lg'),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+            ->bulkActions([])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery()
-            ->select(['id', 'name', 'price', 'shop_id', 'disease_id', 'created_at'])
-            ->with(['shop', 'disease', 'image']);
+            ->select(['id', 'name', 'price', 'description', 'shop_id', 'disease_id'])
+            ->with(['shop:id,name', 'disease:id,name']);
 
-        if (auth('web')->user()->role == 'penjual') {
-            $query->whereHas('shop', function ($query) {
-                $query->where('user_id', auth('web')->id());
-            });
+        if (auth('web')->user()->role === 'penjual') {
+            $query->whereHas('shop', fn($q) => $q->where('user_id', auth('web')->id()));
         }
 
         $cacheKey = 'products_resource_data_' . auth('web')->id();
@@ -120,10 +114,7 @@ class ProductResource extends Resource
             return $query->pluck('id');
         });
 
-        return static::$model::query()
-            ->whereIn('id', $productIds)
-            ->select(['id', 'name', 'price', 'shop_id', 'disease_id', 'created_at'])
-            ->with(['shop', 'disease', 'image']);
+        return $query->whereIn('id', $productIds);
     }
 
     public static function getRelations(): array
