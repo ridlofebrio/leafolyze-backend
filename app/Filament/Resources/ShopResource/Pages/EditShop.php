@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ShopResource\Pages;
 use App\Filament\Resources\ShopResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ShopService;
 use App\Services\Interfaces\CloudinaryServiceInterface;
@@ -32,7 +33,7 @@ class EditShop extends EditRecord
         if (isset($data['image'])) {
             $tempFile = Storage::disk('public')->get($data['image']);
             $tempPath = Storage::disk('public')->path($data['image']);
-            
+
             // Buat UploadedFile instance
             $file = new \Illuminate\Http\UploadedFile(
                 $tempPath,
@@ -41,7 +42,7 @@ class EditShop extends EditRecord
                 null,
                 true
             );
-            
+
             // Update data dengan file yang sudah dikonversi
             $data['image'] = $file;
         }

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages\Penjual;
 
+use App\Services\Interfaces\CloudinaryServiceInterface;
+use App\Services\ShopService;
 use Filament\Forms;
 use Filament\Pages\Actions\Action;
 use Filament\Forms\Form;
@@ -11,6 +13,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Storage;
 
 class PersonalShop extends Page
 {
@@ -23,6 +26,7 @@ class PersonalShop extends Page
     protected static ?int $navigationSort = 1;
 
     public $shop = null;
+    public $image;
 
     // Define the properties for form fields
     public $name;
@@ -61,6 +65,7 @@ class PersonalShop extends Page
                 'description' => $this->shop->description,
                 'address' => $this->shop->address,
                 'operational' => $this->shop->operational,
+                'image' => $this->shop->image ? $this->shop->image->path : null,
             ]);
         }
     }
@@ -102,6 +107,19 @@ class PersonalShop extends Page
                             ->placeholder('e.g. Mon-Fri 09:00-17:00')
                             ->required()
                             ->maxLength(255),
+
+                        Forms\Components\FileUpload::make('image')
+                            ->image()
+                            ->directory('shops')
+                            ->maxSize(2048)
+                            ->label('Product Image')
+                            ->disk('public')
+                            ->preserveFilenames()
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('1:1')
+                            ->imageResizeTargetWidth('512')
+                            ->imageResizeTargetHeight('512')
+                            ->helperText('Max 2MB.')
                     ]),
             ]);
     }
@@ -119,8 +137,31 @@ class PersonalShop extends Page
     {
         $data = $this->form->getState();
 
+        if (isset($data['image'])) {
+            if (is_string($data['image'])) {
+                $data['image'] = [$data['image']];
+            }
+        }
+
         if ($this->shop) {
-            $this->shop->update($data);
+            if (isset($data['image'])) {
+                $tempFile = Storage::disk('public')->get($data['image'][0]);
+                $tempPath = Storage::disk('public')->path($data['image'][0]);
+
+                $file = new \Illuminate\Http\UploadedFile(
+                    $tempPath,
+                    $data['image'][0],
+                    Storage::disk('public')->mimeType($data['image'][0]),
+                    null,
+                    true
+                );
+
+                $data['image'] = $file;
+            }
+
+            $cloudinaryService = app(CloudinaryServiceInterface::class);
+            $shopService = new ShopService($cloudinaryService);
+            $shopService->updateShop($this->shop->id, $data);
         } else {
             $data['user_id'] = Auth::id();
             $this->shop = Shop::create($data);

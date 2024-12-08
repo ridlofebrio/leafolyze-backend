@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\ProductService;
 use App\Services\Interfaces\CloudinaryServiceInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
+
 class EditProduct extends EditRecord
 {
     protected static string $resource = ProductResource::class;
@@ -28,11 +28,10 @@ class EditProduct extends EditRecord
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        log::info('id:', [$record->id]);
         if (isset($data['image'])) {
             $tempFile = Storage::disk('public')->get($data['image']);
             $tempPath = Storage::disk('public')->path($data['image']);
-            
+
             // Buat UploadedFile instance
             $file = new \Illuminate\Http\UploadedFile(
                 $tempPath,
@@ -41,7 +40,7 @@ class EditProduct extends EditRecord
                 null,
                 true
             );
-            
+
             // Update data dengan file yang sudah dikonversi
             $data['image'] = $file;
         }

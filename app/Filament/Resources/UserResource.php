@@ -31,6 +31,7 @@ class UserResource extends Resource
                             ->email()
                             ->label('Email')
                             ->lazy()
+                            ->disabled()
                             ->unique(ignoreRecord: true),
 
                         Forms\Components\TextInput::make('password')
@@ -38,14 +39,6 @@ class UserResource extends Resource
                             ->dehydrateStateUsing(fn($state) => Hash::make($state))
                             ->label('Password')
                             ->lazy(),
-
-                        Forms\Components\Select::make('access')
-                            ->options([
-                                'admin' => 'Admin',
-                                'penjual' => 'Penjual',
-                                'user' => 'User',
-                            ])
-                            ->required(),
                     ]),
                 Forms\Components\Section::make('Detail Information')
                     ->schema([
@@ -193,14 +186,8 @@ class UserResource extends Resource
                 ),
             ]);
 
-        $cacheKey = 'users_resource_' . auth('web')->id();
-
-        $userIds = Cache::remember($cacheKey, 3600, function () use ($query) {
-            return $query->pluck('id');
-        });
-
         return static::$model::query()
-            ->whereIn('id', $userIds)
+            ->whereIn('id', $query->pluck('id'))
             ->where('access', '!=', 'admin')
             ->latest();
     }

@@ -146,14 +146,8 @@ class ArticleResource extends Resource
             ])
             ->latest();
 
-        $cacheKey = 'articles_resource_ids';
-
-        $articleIds = Cache::remember($cacheKey, 3600, function () use ($query) {
-            return $query->pluck('id');
-        });
-
         return static::$model::query()
-            ->whereIn('id', $articleIds)
+            ->whereIn('id', $query->pluck('id'))
             ->select([
                 'id',
                 'title',
