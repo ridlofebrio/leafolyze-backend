@@ -20,7 +20,13 @@ class EditArticle extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
-
+  
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+  
+    }
+  
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
         if (isset($data['image'])) {

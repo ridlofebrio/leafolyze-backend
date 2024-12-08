@@ -13,6 +13,11 @@ class CreateArticle extends CreateRecord
 {
     protected static string $resource = ArticleResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+  
     protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
     {
         $tempFile = Storage::disk('public')->get($data['image']);

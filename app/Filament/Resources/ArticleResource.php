@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Filament\Forms\Components\FileUpload;
 
 class ArticleResource extends Resource
@@ -33,70 +34,84 @@ class ArticleResource extends Resource
                         Forms\Components\TextInput::make('title')
                             ->required()
                             ->maxLength(255)
-                            ->live(onBlur: true),
+                            ->live(onBlur: true)
+                            ->debounce(500)
+                            ->autocomplete(false)
+                            ->placeholder('Enter article title'),
+
                         Forms\Components\TextInput::make('duration')
                             ->required()
                             ->numeric()
                             ->suffix('minutes')
-                            ->minValue(1),
+                            ->minValue(1)
+                            ->maxValue(180)
+                            ->step(5)
+                            ->default(30)
+                            ->lazy(),
+
                         Forms\Components\RichEditor::make('content')
                             ->required()
-                            ->columnSpanFull(),
-                        FileUpload::make('image')
+                            ->columnSpanFull()
+                            ->toolbarButtons([
+                                'bold',
+                                'italic',
+                                'link',
+                                'bulletList',
+                                'orderedList',
+                                'h2',
+                                'h3',
+                            ])
+                            ->fileAttachmentsDisk('public')
+                            ->fileAttachmentsDirectory('articles/attachments')
+                            ->lazy(),
+
+                        Forms\Components\FileUpload::make('image')
                             ->image()
-                            ->directory('articles')
-                            ->maxSize(5120)
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('16:9')
+                            ->imageResizeTargetWidth('1280')
+                            ->imageResizeTargetHeight('720')
                             ->disk('public')
+                            ->directory('articles')
+                            ->maxSize(2048)
                             ->preserveFilenames()
                             ->columnSpanFull()
                             ->label('Article Image')
+                            ->helperText('Recommended size: 1280x720px (16:9). Max 2MB.')
                             ->required(),
-//                        CloudinaryFileUpload::make('image')
-//                            ->image()
-//                            ->directory('articles')
-//                            ->maxSize(5120)
-//                            ->columnSpanFull()
-//                            ->beforeStateDehydrated(function ($component, $state) {
-//                                log::debug('Upload state:', ['state' => $state]);
-//                                return $state;
-//                            })
-//                            ->label('Article Image'),
                     ])
-                    ->columns(2),
-                ]);
-        }
-
+                    ->columns(2)
+                    ->collapsible()
+            ])
+            ->statePath('data');
+    }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('created_at', 'desc')
+            ->deferLoading()
+            ->poll('0')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->limit(50),
                 Tables\Columns\TextColumn::make('duration')
                     ->suffix(' min')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->alignCenter(),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->modalWidth('lg'),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+            ->bulkActions([])
+            ->emptyStateActions([
+                Tables\Actions\CreateAction::make(),
             ]);
     }
 
@@ -118,6 +133,37 @@ class ArticleResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('image');
+        $query = parent::getEloquentQuery()
+            ->select([
+                'id',
+                'title',
+                'duration',
+                'content',
+                'created_at'
+            ])
+            ->with([
+                'image' => fn($q) => $q->select('id', 'article_id', 'path')
+            ])
+            ->latest();
+
+        $cacheKey = 'articles_resource_ids';
+
+        $articleIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $articleIds)
+            ->select([
+                'id',
+                'title',
+                'duration',
+                'content',
+                'created_at'
+            ])
+            ->with([
+                'image' => fn($q) => $q->select('id', 'article_id', 'path')
+            ])
+            ->latest();
     }
 }

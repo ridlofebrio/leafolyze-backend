@@ -12,70 +12,88 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Cache;
 
 class ShopResource extends Resource
 {
     protected static ?string $model = Shop::class;
-
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('address')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('description')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('operational')
-                    ->required()
-                    ->maxLength(255),
-                FileUpload::make('image')
-                    ->image()
-                    ->directory('shops')
-                    ->maxSize(5120)
-                    ->disk('public')
-                    ->preserveFilenames()
-                    ->columnSpanFull()
-                    ->label('Shop Image')
-                    ->required(),
+                Forms\Components\Section::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->required()
+                            ->maxLength(255)
+                            ->lazy()
+                            ->placeholder('Shop name'),
+
+                        Forms\Components\TextInput::make('operational')
+                            ->required()
+                            ->maxLength(255)
+                            ->lazy()
+                            ->placeholder('e.g. Mon-Fri 09:00-17:00'),
+
+                        Forms\Components\TextInput::make('address')
+                            ->required()
+                            ->maxLength(255)
+                            ->lazy()
+                            ->columnSpanFull(),
+
+                        Forms\Components\Textarea::make('description')
+                            ->required()
+                            ->maxLength(255)
+                            ->lazy()
+                            ->rows(3)
+                            ->columnSpanFull(),
+
+                        Forms\Components\FileUpload::make('image')
+                            ->image()
+                            ->directory('shops')
+                            ->maxSize(5120)
+                            ->disk('public')
+                            ->preserveFilenames()
+                            ->columnSpanFull()
+                            ->label('Shop Image')
+                            ->required(),
+                    ])
+                    ->columns(2),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('created_at', 'desc')
+            ->deferLoading()
+            ->poll('0')
             ->columns([
+                Tables\Columns\ImageColumn::make('image.path')
+                    ->label('Image')
+                    ->square(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('user.userDetail.name')
                     ->label('Owner')
-                    ->sortable()
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('address')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->wrap(true)
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('operational')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -87,11 +105,45 @@ class ShopResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
+    public static function getEloquentQuery(): Builder
     {
-        return [
-            //
-        ];
+        $query = parent::getEloquentQuery()
+            ->select([
+                'id',
+                'name',
+                'address',
+                'description',
+                'operational',
+                'user_id',
+                'created_at'
+            ])
+            ->with([
+                'user.userDetail' => fn($q) => $q->select('id', 'name'),
+                'image' => fn($q) => $q->select('id', 'shop_id', 'path')
+            ]);
+
+        $cacheKey = 'shops_resource_' . auth('web')->id();
+
+        $shopIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $shopIds)
+            ->select([
+                'id',
+                'name',
+                'address',
+                'description',
+                'operational',
+                'user_id',
+                'created_at'
+            ])
+            ->with([
+                'user.userDetail',
+                'image'
+            ])
+            ->latest();
     }
 
     public static function getPages(): array

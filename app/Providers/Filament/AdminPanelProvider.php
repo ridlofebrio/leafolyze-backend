@@ -53,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
                 EnsureUserRole::class . ':admin',
             ])
+            ->spa()
             ->authGuard('web')
             ->login(false)
             ->registration(false)

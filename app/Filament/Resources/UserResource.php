@@ -3,34 +3,51 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Forms\Components\TextInput;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()->with('userDetail');
-    }
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make('User Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('email')
+                            ->required()
+                            ->email()
+                            ->label('Email')
+                            ->lazy()
+                            ->unique(ignoreRecord: true),
+
+                        Forms\Components\TextInput::make('password')
+                            ->password()
+                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
+                            ->label('Password')
+                            ->lazy(),
+
+                        Forms\Components\Select::make('access')
+                            ->options([
+                                'admin' => 'Admin',
+                                'penjual' => 'Penjual',
+                                'user' => 'User',
+                            ])
+                            ->required(),
+                    ]),
+                Forms\Components\Section::make('Detail Information')
                     ->schema([
                         Forms\Components\TextInput::make('userDetail.name')
                             ->required()
@@ -61,6 +78,7 @@ class UserResource extends Resource
                                     $record->userDetail->update(['birth' => $state]);
                                 }
                             }),
+
                         Forms\Components\Select::make('userDetail.gender')
                             ->label('Gender')
                             ->options([
@@ -79,6 +97,7 @@ class UserResource extends Resource
                                     $record->userDetail->update(['gender' => $state]);
                                 }
                             }),
+
                         Forms\Components\Textarea::make('userDetail.address')
                             ->label('Address')
                             ->afterStateHydrated(function ($component, $state, $record) {
@@ -94,42 +113,53 @@ class UserResource extends Resource
                                     $record->userDetail->update(['address' => $state]);
                                 }
                             }),
-                        // Original user fields
-                        Forms\Components\TextInput::make('email')
-                            ->required()
-                            ->email()
-                            ->unique(ignoreRecord: true),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->dehydrateStateUsing(fn($state) => Hash::make($state))
-                            ->required(fn(string $operation): bool => $operation === 'create'),
-                        Forms\Components\Select::make('access')
-                            ->options([
-                                'admin' => 'Admin',
-                                'petani' => 'Petani',
-                                'penjual' => 'Penjual',
-                            ])
-                            ->required(),
-                    ]),
+                    ])
+                    ->columns(2),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('created_at', 'desc')
+            ->deferLoading()
+            ->poll('0')
+            ->recordUrl(null)
             ->columns([
                 Tables\Columns\TextColumn::make('userDetail.name')
                     ->label('Name')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('access'),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('access')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'admin' => 'danger',
+                        'penjual' => 'warning',
+                        default => 'success',
+                    }),
+                Tables\Columns\TextColumn::make('userDetail.birth')
+                    ->label('Birth Date')
+                    ->date()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('userDetail.gender')
+                    ->label('Gender')
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('access')
+                    ->options([
+                        'admin' => 'Admin',
+                        'penjual' => 'Penjual',
+                        'user' => 'User',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -140,6 +170,39 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery()
+            ->select([
+                'id',
+                'email',
+                'access',
+                'created_at',
+            ])
+            ->where('access', '!=', 'admin')
+            ->with([
+                'userDetail' => fn($q) => $q->select(
+                    'id',
+                    'user_id',
+                    'name',
+                    'birth',
+                    'gender',
+                    'address'
+                ),
+            ]);
+
+        $cacheKey = 'users_resource_' . auth('web')->id();
+
+        $userIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $userIds)
+            ->where('access', '!=', 'admin')
+            ->latest();
     }
 
     public static function getRelations(): array
