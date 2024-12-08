@@ -17,7 +17,6 @@ class CreateProductRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'shop_id' => 'required|exists:shops,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'disease_id' => 'required',

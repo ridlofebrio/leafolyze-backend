@@ -3,15 +3,19 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticleResource\Pages;
+use App\Forms\Components\CloudinaryFileUpload;
 use App\Models\Article;
+use App\Services\CloudinaryService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Filament\Forms\Components\FileUpload;
 
 class ArticleResource extends Resource
 {
@@ -67,11 +71,14 @@ class ArticleResource extends Resource
                             ->imageCropAspectRatio('16:9')
                             ->imageResizeTargetWidth('1280')
                             ->imageResizeTargetHeight('720')
-                            ->directory('articles/images')
+                            ->disk('public')
+                            ->directory('articles')
                             ->maxSize(2048)
+                            ->preserveFilenames()
                             ->columnSpanFull()
-                            ->label('Featured Image')
+                            ->label('Article Image')
                             ->helperText('Recommended size: 1280x720px (16:9). Max 2MB.')
+                            ->required(),
                     ])
                     ->columns(2)
                     ->collapsible()

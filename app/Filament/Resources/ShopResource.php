@@ -53,8 +53,12 @@ class ShopResource extends Resource
                         Forms\Components\FileUpload::make('image')
                             ->image()
                             ->directory('shops')
-                            ->maxSize(1024)
-                            ->columnSpanFull(),
+                            ->maxSize(5120)
+                            ->disk('public')
+                            ->preserveFilenames()
+                            ->columnSpanFull()
+                            ->label('Shop Image')
+                            ->required(),
                     ])
                     ->columns(2),
             ]);

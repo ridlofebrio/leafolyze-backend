@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Disease;
 use App\Models\Shop;
+use Filament\Forms\Components\FileUpload;
 
 class ProductResource extends Resource
 {
@@ -66,12 +67,15 @@ class ProductResource extends Resource
                                 Forms\Components\FileUpload::make('image')
                                     ->image()
                                     ->directory('products')
-                                    ->maxSize(1024)
+                                    ->maxSize(2048)
                                     ->label('Product Image')
+                                    ->disk('public')
+                                    ->preserveFilenames()
                                     ->imageResizeMode('cover')
                                     ->imageCropAspectRatio('1:1')
                                     ->imageResizeTargetWidth('512')
-                                    ->imageResizeTargetHeight('512'),
+                                    ->imageResizeTargetHeight('512')
+                                    ->required(),
                             ])
                             ->columns(1),
                     ])

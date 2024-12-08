@@ -19,6 +19,7 @@ class Shop extends Model
         'user_id',
         'name',
         'address',
+        'noHp',
         'description',
         'operational',
     ];
