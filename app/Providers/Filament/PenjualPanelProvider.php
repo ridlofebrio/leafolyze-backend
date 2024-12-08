@@ -55,6 +55,7 @@ class PenjualPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->spa()
             ->authGuard('web')
             ->login(false)
             ->registration(false)
