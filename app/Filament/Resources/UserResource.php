@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Cache;
 
 class UserResource extends Resource
 {
@@ -23,7 +24,20 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('userDetail');
+        $query = parent::getEloquentQuery()
+            ->with('userDetail')
+            ->select(['id', 'email', 'created_at']);
+
+        $cacheKey = 'users_resource_data';
+
+        $userIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $userIds)
+            ->with('userDetail')
+            ->select(['id', 'email', 'created_at']);
     }
 
     public static function form(Form $form): Form
@@ -117,6 +131,9 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('id', 'desc')
+            ->poll('0')
             ->columns([
                 Tables\Columns\TextColumn::make('userDetail.name')
                     ->label('Name')

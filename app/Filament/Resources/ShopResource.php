@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Cache;
 
 class ShopResource extends Resource
 {
@@ -41,6 +42,9 @@ class ShopResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('id', 'desc')
+            ->poll('0')
             ->columns([
                 Tables\Columns\TextColumn::make('user.userDetail.name')
                     ->label('Owner')
@@ -76,6 +80,24 @@ class ShopResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery()
+            ->select(['id', 'name', 'address', 'description', 'operational', 'user_id'])
+            ->with(['user.userDetail']);
+
+        $cacheKey = 'shops_resource_data';
+
+        $shopIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $shopIds)
+            ->select(['id', 'name', 'address', 'description', 'operational', 'user_id'])
+            ->with(['user.userDetail']);
     }
 
     public static function getRelations(): array

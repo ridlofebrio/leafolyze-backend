@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleResource extends Resource
 {
@@ -99,6 +100,19 @@ class ArticleResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('image');
+        $query = parent::getEloquentQuery()
+            ->select(['id', 'title', 'duration', 'created_at', 'updated_at'])
+            ->with('image');
+
+        $cacheKey = 'articles_resource_data';
+
+        $articleIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $articleIds)
+            ->select(['id', 'title', 'duration', 'created_at', 'updated_at'])
+            ->with('image');
     }
 }

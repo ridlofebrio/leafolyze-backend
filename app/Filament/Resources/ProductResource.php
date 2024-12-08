@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Disease;
 use App\Models\Shop;
 
@@ -61,6 +62,9 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultPaginationPageOption(25)
+            ->defaultSort('id', 'desc')
+            ->poll('0')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
@@ -100,12 +104,26 @@ class ProductResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
+        $query = parent::getEloquentQuery()
+            ->select(['id', 'name', 'price', 'shop_id', 'disease_id', 'created_at'])
+            ->with(['shop', 'disease', 'image']);
+
         if (auth('web')->user()->role == 'penjual') {
-            return parent::getEloquentQuery()->whereHas('shop', function ($query) {
+            $query->whereHas('shop', function ($query) {
                 $query->where('user_id', auth('web')->id());
             });
         }
-        return parent::getEloquentQuery();
+
+        $cacheKey = 'products_resource_data_' . auth('web')->id();
+
+        $productIds = Cache::remember($cacheKey, 3600, function () use ($query) {
+            return $query->pluck('id');
+        });
+
+        return static::$model::query()
+            ->whereIn('id', $productIds)
+            ->select(['id', 'name', 'price', 'shop_id', 'disease_id', 'created_at'])
+            ->with(['shop', 'disease', 'image']);
     }
 
     public static function getRelations(): array
