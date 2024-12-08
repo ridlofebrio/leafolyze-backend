@@ -37,30 +37,32 @@ class ArticleService implements ArticleServiceInterface
     }
 
     public function createArticle(array $data)
-   {
-       try {
-           if (isset($data['image'])) {
-               $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'articles');
-                // Create article
-               $article = Article::create([
-                   'user_id' => $data['user_id'],
-                   'title' => $data['title'],
-                   'content' => $data['content'],
-                   'duration' => $data['duration'],
-               ]);
-                $article->image()->create([
-                   'path' => $uploadResult['path'],
-                   'public_id' => $uploadResult['public_id'],
-                   'type' => 'article'
-               ]);
-                return $article->load('image');
-           }
+{
+    try {
+        if (!isset($data['image']) || empty($data['image'])) {
             throw new \Exception('Article image is required');
-       } catch (\Exception $e) {
-           Log::error('Error creating article: ' . $e->getMessage());
-           throw $e;
-       }
-   }
+        }
+
+        $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'articles');
+        
+        $article = Article::create([
+            'title' => $data['title'],
+            'content' => $data['content'],
+            'duration' => $data['duration'],
+        ]);
+
+        $article->image()->create([
+            'path' => $uploadResult['path'],
+            'public_id' => $uploadResult['public_id'],
+            'type' => 'article'
+        ]);
+
+        return $article->load('image');
+    } catch (\Exception $e) {
+        Log::error('Error creating article: ' . $e->getMessage());
+        throw $e;
+    }
+}
 
     public function updateArticle(int $id, array $data)
    {

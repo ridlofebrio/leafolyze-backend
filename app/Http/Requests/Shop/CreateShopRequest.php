@@ -20,6 +20,7 @@ class CreateShopRequest extends FormRequest
             'description' => 'sometimes|string|max:1000',
             'operational' => 'required|string|max:255',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'noHp' => 'sometimes|string|max:15',
         ];
     }
 }

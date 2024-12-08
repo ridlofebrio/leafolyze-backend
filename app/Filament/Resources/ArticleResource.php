@@ -3,14 +3,18 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ArticleResource\Pages;
+use App\Forms\Components\CloudinaryFileUpload;
 use App\Models\Article;
+use App\Services\CloudinaryService;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\FileUpload;
 
 class ArticleResource extends Resource
 {
@@ -38,15 +42,30 @@ class ArticleResource extends Resource
                         Forms\Components\RichEditor::make('content')
                             ->required()
                             ->columnSpanFull(),
-                        Forms\Components\FileUpload::make('image')
+                        FileUpload::make('image')
                             ->image()
                             ->directory('articles')
+                            ->maxSize(5120)
+                            ->disk('public')
+                            ->preserveFilenames()
                             ->columnSpanFull()
-                            ->label('Featured Image'),
+                            ->label('Article Image')
+                            ->required(),
+//                        CloudinaryFileUpload::make('image')
+//                            ->image()
+//                            ->directory('articles')
+//                            ->maxSize(5120)
+//                            ->columnSpanFull()
+//                            ->beforeStateDehydrated(function ($component, $state) {
+//                                log::debug('Upload state:', ['state' => $state]);
+//                                return $state;
+//                            })
+//                            ->label('Article Image'),
                     ])
                     ->columns(2),
-            ]);
-    }
+                ]);
+        }
+
 
     public static function table(Table $table): Table
     {
