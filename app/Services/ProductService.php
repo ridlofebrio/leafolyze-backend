@@ -72,7 +72,6 @@ class ProductService implements ProductServiceInterface
                     'name' => $data['name'],
                     'description' => $data['description'],
                     'price' => $data['price'],
-                    'stock' => $data['stock'],
                     'shop_id' => $data['shop_id'],
                     'disease_id' => $data['disease_id'],
                 ]);
@@ -98,11 +97,6 @@ class ProductService implements ProductServiceInterface
         try {
             $product = Product::findOrFail($id);
 
-            // Check if user owns the shop
-            if ($product->shop->user_id !== Auth::guard('api')->id()) {
-                throw new \Exception('Unauthorized. You can only update your own products.');
-            }
-
             // Handle image update if new image is provided
             if (isset($data['image'])) {
                 $uploadResult = $this->cloudinaryService->uploadFile($data['image'], 'products');
@@ -127,7 +121,6 @@ class ProductService implements ProductServiceInterface
                 'name' => $data['name'] ?? $product->name,
                 'description' => $data['description'] ?? $product->description,
                 'price' => $data['price'] ?? $product->price,
-                'stock' => $data['stock'] ?? $product->stock,
             ]);
 
             return $product->fresh(['shop.user.userDetail', 'image']);

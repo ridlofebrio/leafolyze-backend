@@ -35,6 +35,15 @@ class ShopResource extends Resource
                 Forms\Components\TextInput::make('operational')
                     ->required()
                     ->maxLength(255),
+                FileUpload::make('image')
+                    ->image()
+                    ->directory('shops')
+                    ->maxSize(5120)
+                    ->disk('public')
+                    ->preserveFilenames()
+                    ->columnSpanFull()
+                    ->label('Shop Image')
+                    ->required(),
             ]);
     }
 

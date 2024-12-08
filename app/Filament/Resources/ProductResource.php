@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Models\Disease;
 use App\Models\Shop;
+use Filament\Forms\Components\FileUpload;
 
 class ProductResource extends Resource
 {
@@ -50,11 +51,15 @@ class ProductResource extends Resource
                     ->relationship('disease', 'name')
                     ->native(false)
                     ->preload(),
-                Forms\Components\FileUpload::make('image')
+                FileUpload::make('image')
                     ->image()
                     ->directory('products')
+                    ->maxSize(5120)
+                    ->disk('public')
+                    ->preserveFilenames()
                     ->columnSpanFull()
-                    ->label('Product Image'),
+                    ->label('Product Image')
+                    ->required(),
             ]);
     }
 
