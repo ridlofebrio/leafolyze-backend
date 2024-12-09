@@ -58,6 +58,7 @@ class ShopResource extends Resource
                             ->preserveFilenames()
                             ->columnSpanFull()
                             ->label('Shop Image')
+                            ->helperText('Max 2MB.')
                             ->required(),
                     ])
                     ->columns(2),
@@ -72,9 +73,6 @@ class ShopResource extends Resource
             ->deferLoading()
             ->poll('0')
             ->columns([
-                Tables\Columns\ImageColumn::make('image.path')
-                    ->label('Image')
-                    ->square(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -122,14 +120,8 @@ class ShopResource extends Resource
                 'image' => fn($q) => $q->select('id', 'shop_id', 'path')
             ]);
 
-        $cacheKey = 'shops_resource_' . auth('web')->id();
-
-        $shopIds = Cache::remember($cacheKey, 3600, function () use ($query) {
-            return $query->pluck('id');
-        });
-
         return static::$model::query()
-            ->whereIn('id', $shopIds)
+            ->whereIn('id', $query->pluck('id'))
             ->select([
                 'id',
                 'name',

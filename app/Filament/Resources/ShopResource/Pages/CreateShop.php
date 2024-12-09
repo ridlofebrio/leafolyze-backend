@@ -13,11 +13,16 @@ class CreateShop extends CreateRecord
 {
     protected static string $resource = ShopResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function handleRecordCreation(array $data): \Illuminate\Database\Eloquent\Model
     {
         $tempFile = Storage::disk('public')->get($data['image']);
         $tempPath = Storage::disk('public')->path($data['image']);
-        
+
         $file = new \Illuminate\Http\UploadedFile(
             $tempPath,
             $data['image'],
@@ -25,7 +30,7 @@ class CreateShop extends CreateRecord
             null,
             true
         );
-        
+
         $data['image'] = $file;
 
         $cloudinaryService = app(CloudinaryServiceInterface::class);

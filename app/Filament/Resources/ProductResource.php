@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Disease;
 use App\Models\Shop;
 use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\Log;
 
 class ProductResource extends Resource
 {
@@ -75,7 +76,8 @@ class ProductResource extends Resource
                                     ->imageCropAspectRatio('1:1')
                                     ->imageResizeTargetWidth('512')
                                     ->imageResizeTargetHeight('512')
-                                    ->required(),
+                                    ->helperText('Max 2MB.')
+//                                    ->required(),
                             ])
                             ->columns(1),
                     ])
@@ -92,9 +94,6 @@ class ProductResource extends Resource
             ->deferLoading()
             ->persistSortInSession()
             ->columns([
-                Tables\Columns\ImageColumn::make('image')
-                    ->square()
-                    ->label('Image'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable()
@@ -131,6 +130,8 @@ class ProductResource extends Resource
     }
     public static function getEloquentQuery(): Builder
     {
+        $user = auth('web')->user();
+
         $query = parent::getEloquentQuery()
             ->select([
                 'id',
@@ -144,23 +145,17 @@ class ProductResource extends Resource
             ->with([
                 'shop' => fn($q) => $q->select('id', 'name', 'user_id'),
                 'disease' => fn($q) => $q->select('id', 'name'),
-                'image' => fn($q) => $q->select('id', 'product_id', 'path')
+                'image' => fn($q) => $q->select('id', 'product_id', 'path'),
             ]);
 
-        if (auth('web')->user()->role === 'penjual') {
-            $query->whereHas('shop', function ($q) {
-                $q->where('user_id', auth('web')->id());
+        if ($user->role === 'penjual') {
+            $query->whereHas('shop', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
             });
         }
 
-        $cacheKey = 'products_resource_' . auth('web')->id() . '_' . auth('web')->user()->role;
-
-        $productIds = Cache::remember($cacheKey, 3600, function () use ($query) {
-            return $query->pluck('id');
-        });
-
         return static::$model::query()
-            ->whereIn('id', $productIds)
+            ->whereIn('id', $query->pluck('id'))
             ->latest();
     }
 
