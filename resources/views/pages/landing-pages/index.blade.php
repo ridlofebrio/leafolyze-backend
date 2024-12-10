@@ -6,7 +6,7 @@
         }
 
         .active {
-            color: #417777;
+            color: #B4DB46;
         }
     </style>
 @endsection
