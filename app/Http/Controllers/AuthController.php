@@ -38,8 +38,33 @@ class AuthController extends Controller
 
     public function registerPenjual(Request $request)
     {
-        $result = $this->authService->register($request->validated(), 'penjual');
-        return ApiResponse::success('Register successful', $result)->response();
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+                'access' => 'penjual',
+            ]);
+
+            $user->userDetail()->create([
+                'name' => $request['name'],
+            ]);
+
+            $user->shop()->create([
+                'name' => 'Toko Tanaman Sehat',
+                'address' => '',
+                'description' => '',
+                'operational' => '',
+            ]);
+
+            Auth::guard('web')->login($user);
+            DB::commit();
+
+            return redirect('/penjual');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Registration failed']);
+        }
     }
 
     public function handleLogin(LoginRequest $request)
@@ -50,11 +75,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             session()->put('auth.password_confirmed_at', time());
 
-            return match (Auth::guard('web')->user()->access) {
-                'admin' => redirect('/admin'),
-                'penjual' => redirect('/penjual'),
-                default => redirect('/dashboard'),
-            };
+            return $this->redirectBasedOnRole(Auth::guard('web')->user());
         }
 
         return back()->withErrors([
