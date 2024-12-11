@@ -31,18 +31,16 @@ Route::group(['prefix' => 'articles'], function () {
     });
 });
 
-Route::group(['prefix' => 'products'], function () {
+Route::group(['prefix' => 'products', 'middleware' => 'auth.api:api'], function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('/{id}', [ProductController::class, 'show']);
     Route::get('/shop/{shopId}', [ProductController::class, 'byShop']);
     Route::get('/disease/{diseaseId}', [ProductController::class, 'byDisease']);
-
-    Route::group(['middleware' => 'auth.api:api'], function () {
-        Route::post('/', [ProductController::class, 'store']);
-        Route::post('/{id}', [ProductController::class, 'update']);
-        Route::delete('/{id}', [ProductController::class, 'destroy']);
-    });
+    Route::post('/', [ProductController::class, 'store']);
+    Route::post('/{id}', [ProductController::class, 'update']);
+    Route::delete('/{id}', [ProductController::class, 'destroy']);
 });
+
 
 Route::group(['prefix' => 'detections'], function () {
     Route::get('/', [DetectionController::class, 'index']);
