@@ -156,8 +156,6 @@ class ProductResource extends Resource
             });
 
         }
-        dd(DB::getQueryLog());
-
         return static::$model::query()
             ->whereIn('id', $query->pluck('id'))
             ->latest();
