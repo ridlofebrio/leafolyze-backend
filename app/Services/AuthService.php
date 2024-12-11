@@ -38,15 +38,6 @@ class AuthService implements AuthServiceInterface
                 'name' => $data['name'],
             ]);
 
-            if ($access === 'penjual') {
-                $user->shop()->create([
-                    'name' => $data['shop_name'],
-                    'address' => $data['shop_address'],
-                    'description' => $data['shop_description'],
-                    'operational' => $data['shop_operational'],
-                ]);
-            }
-
             Auth::login($user);
             $token = Auth::tokenById($user->id);
             return $this->respondWithToken($token);

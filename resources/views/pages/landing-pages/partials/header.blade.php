@@ -23,28 +23,30 @@
                     </div>
                 </div>
 
-                <!-- Login/Register Buttons -->
-                <div class="hidden md:block">
-                    <div class="flex items-center space-x-4">
-                        <a href="/login"
-                            class="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#c1e165]">Login</a>
-                        <a href="/register"
-                            class="rounded-md bg-[#B4DB46] px-4 py-2 text-sm font-medium text-white hover:bg-[#96b73a]">Register</a>
+                <div class="flex items-center justify-center gap-4">
+                    <!-- Login/Register Buttons -->
+                    <div class="block">
+                        <div class="flex items-center space-x-4">
+                            <a href="/login"
+                                class="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:text-[#c1e165]">Login</a>
+                            <a href="/register"
+                                class="rounded-md bg-[#B4DB46] px-4 py-2 text-sm font-medium text-white hover:bg-[#96b73a]">Register</a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button type="button"
-                        class="inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden">
+                        <button type="button"
+                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-800 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                            aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
