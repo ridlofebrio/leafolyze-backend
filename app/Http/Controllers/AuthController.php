@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\UserDetail;
 use App\Models\Shop;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -39,6 +40,7 @@ class AuthController extends Controller
     public function registerPenjual(Request $request)
     {
         DB::beginTransaction();
+        log::info($request);
         try {
             $user = User::create([
                 'email' => $request['email'],
@@ -55,15 +57,19 @@ class AuthController extends Controller
                 'address' => '',
                 'description' => '',
                 'operational' => '',
+                'noHp'=> '',
             ]);
 
             Auth::guard('web')->login($user);
             DB::commit();
-
+            Log::info('Berhasil');
             return redirect('/penjual');
+
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::info("Error");
             return back()->withErrors(['error' => 'Registration failed']);
+
         }
     }
 

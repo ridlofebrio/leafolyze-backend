@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Disease;
 use App\Models\Shop;
 use Filament\Forms\Components\FileUpload;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProductResource extends Resource
@@ -130,6 +131,7 @@ class ProductResource extends Resource
     }
     public static function getEloquentQuery(): Builder
     {
+
         $user = auth('web')->user();
 
         $query = parent::getEloquentQuery()
@@ -148,12 +150,12 @@ class ProductResource extends Resource
                 'image' => fn($q) => $q->select('id', 'product_id', 'path'),
             ]);
 
-        if ($user->role === 'penjual') {
+        if ($user->access == 'penjual') {
             $query->whereHas('shop', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
-        }
 
+        }
         return static::$model::query()
             ->whereIn('id', $query->pluck('id'))
             ->latest();
