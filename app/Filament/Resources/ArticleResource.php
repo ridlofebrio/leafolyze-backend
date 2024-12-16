@@ -91,7 +91,6 @@ class ArticleResource extends Resource
         return $table
             ->defaultPaginationPageOption(25)
             ->defaultSort('created_at', 'desc')
-            ->deferLoading()
             ->poll('0')
             ->columns([
                 Tables\Columns\TextColumn::make('title')
@@ -107,7 +106,6 @@ class ArticleResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->modalWidth('lg'),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([])
             ->emptyStateActions([

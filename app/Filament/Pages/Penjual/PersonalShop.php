@@ -91,7 +91,7 @@ class PersonalShop extends Page
                             ->required()
                             ->maxLength(255),
 
-                        Forms\Components\TextArea::make('description')
+                        Forms\Components\Textarea::make('description')
                             ->label('Description')
                             ->required()
                             ->rows(5)
