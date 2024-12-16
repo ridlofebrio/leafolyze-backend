@@ -3,15 +3,10 @@
         <!-- Left Side - Image -->
         <div class="md:w-1/2">
             <div class="relative">
-                <!-- Gambar Pertama -->
-                <img src="{{ asset('assets/images/example.jpg') }}" alt="About Us"
-                    class="absolute left-1/4 top-0 z-[1] h-auto w-3/4 -translate-y-1/4 transform rounded-lg object-cover shadow-lg">
-
-                <!-- Gambar Kedua -->
-                <img src="{{ asset('assets/images/example.jpg') }}" alt="About Us"
-                    class="absolute bottom-0 right-1/4 z-[2] h-auto w-3/4 translate-y-1/4 transform rounded-lg object-cover shadow-lg">
+                <img src="{{ asset('assets/images/healthyleaftomato.jpg') }}" alt="About Us"
+                    class="h-auto rounded-lg object-cover shadow-lg">
             </div>
-        </div>
+        </div>
 
         <!-- Right Side - Content -->
         <div class="md:w-1/2">
