@@ -30,8 +30,8 @@
         <div class="mt-10 md:mt-0 md:w-1/2">
             <div class="relative">
                 <!-- Main Image -->
-                <img src="{{ asset('assets/images/example.jpg') }}" alt="Hero Image"
-                    class="h-auto w-full rounded-lg shadow-xl">
+                <img src="{{ asset('assets/images/orang.png') }}" alt="Hero Image"
+                    class="h-auto w-full rounded-lg">
             </div>
         </div>
     </div>
