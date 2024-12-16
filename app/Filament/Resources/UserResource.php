@@ -116,7 +116,6 @@ class UserResource extends Resource
         return $table
             ->defaultPaginationPageOption(25)
             ->defaultSort('created_at', 'desc')
-            ->deferLoading()
             ->poll('0')
             ->recordUrl(null)
             ->columns([
@@ -156,13 +155,8 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getEloquentQuery(): Builder

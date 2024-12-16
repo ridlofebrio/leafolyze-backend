@@ -78,7 +78,7 @@ class ProductResource extends Resource
                                     ->imageResizeTargetWidth('512')
                                     ->imageResizeTargetHeight('512')
                                     ->helperText('Max 2MB.')
-//                                    ->required(),
+                                //                                    ->required(),
                             ])
                             ->columns(1),
                     ])
@@ -92,7 +92,6 @@ class ProductResource extends Resource
             ->defaultPaginationPageOption(25)
             ->defaultSort('created_at', 'desc')
             ->poll('0')
-            ->deferLoading()
             ->persistSortInSession()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -120,11 +119,8 @@ class ProductResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->modalWidth('lg'),
-                Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ])
+            ->bulkActions([])
             ->emptyStateActions([
                 Tables\Actions\CreateAction::make(),
             ]);
@@ -154,7 +150,6 @@ class ProductResource extends Resource
             $query->whereHas('shop', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             });
-
         }
         return static::$model::query()
             ->whereIn('id', $query->pluck('id'))
